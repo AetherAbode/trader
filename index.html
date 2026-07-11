@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5" />
+    <title>AetherEx · The most trusted crypto exchange</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <!-- LiveCoinWatch Widget Scripts -->
+    <script defer src="https://www.livecoinwatch.com/static/lcw-widget.js"></script>
+    <style>
+        /* ── premium design system (Coinbase-inspired) ── */
+        :root {
+            --primary: #0052ff;
+            --primary-dark: #003dcc;
+            --primary-light: #e8edff;
+            --secondary: #7c3aed;
+            --accent: #06d6a0;
+            --gradient-1: linear-gradient(135deg, #0052ff 0%, #7c3aed 50%, #06d6a0 100%);
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow-premium: 0 20px 60px -15px rgba(0, 82, 255, 0.15);
+        }
+        * {
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s, transform 0.25s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.3s;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fb;
+            color: #0b1120;
+            -webkit-font-smoothing: antialiased;
+        }
+        .dark body {
+            background: #0a0a1a;
+            color: #e8edf5;
+        }
+
+        /* ── glassmorphism ── */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+        }
+        .dark .glass {
+            background: rgba(10, 10, 30, 0.7);
+            border-color: rgba(255, 255, 255, 0.06);
+        }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+        }
+        .dark .glass-nav {
+            background: rgba(10, 10, 26, 0.85);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        /* ── buttons ── */
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            transition: all 0.25s;
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 12px 30px -8px rgba(0, 82, 255, 0.35);
+        }
+        .btn-secondary {
+            background: rgba(0, 82, 255, 0.08);
+            color: var(--primary);
+            transition: all 0.25s;
+        }
+        .btn-secondary:hover {
+            background: rgba(0, 82, 255, 0.16);
+            transform: translateY(-2px);
+        }
+        .dark .btn-secondary {
+            background: rgba(0, 82, 255, 0.15);
+            color: #6b9aff;
+        }
+        .dark .btn-secondary:hover {
+            background: rgba(0, 82, 255, 0.25);
+        }
+        .btn-gradient {
+            background: var(--gradient-1);
+            color: #fff;
+            transition: all 0.25s;
+        }
+        .btn-gradient:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 12px 40px -8px rgba(0, 82, 255, 0.4);
+        }
+
+        /* ── cards ── */
+        .card-premium {
+            background: #fff;
+            border-radius: 1.5rem;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+        }
+        .card-premium:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-premium);
+            border-color: rgba(0, 82, 255, 0.08);
+        }
+        .dark .card-premium {
+            background: #12122a;
+            border-color: rgba(255, 255, 255, 0.04);
+        }
+        .dark .card-premium:hover {
+            box-shadow: 0 20px 60px -15px rgba(0, 82, 255, 0.08);
+            border-color: rgba(0, 82, 255, 0.12);
+        }
+
+        /* ── hero ── */
+        .hero-gradient-bg {
+            background: radial-gradient(ellipse at 20% 50%, rgba(0, 82, 255, 0.10) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(124, 58, 237, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(6, 214, 160, 0.04) 0%, transparent 40%),
+                #f5f7fb;
+        }
+        .dark .hero-gradient-bg {
+            background: radial-gradient(ellipse at 20% 50%, rgba(0, 82, 255, 0.12) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(124, 58, 237, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(6, 214, 160, 0.04) 0%, transparent 40%),
+                #0a0a1a;
+        }
+        .hero-shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+        }
+        .hero-shape-1 {
+            width: 400px;
+            height: 400px;
+            background: rgba(0, 82, 255, 0.08);
+            top: -100px;
+            right: -100px;
+        }
+        .hero-shape-2 {
+            width: 300px;
+            height: 300px;
+            background: rgba(124, 58, 237, 0.06);
+            bottom: -80px;
+            left: -80px;
+        }
+        .dark .hero-shape-1 {
+            background: rgba(0, 82, 255, 0.10);
+        }
+        .dark .hero-shape-2 {
+            background: rgba(124, 58, 237, 0.08);
+        }
+
+        /* ── mobile menu ── */
+        #mobileMenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease;
+        }
+        #mobileMenu.open {
+            max-height: 500px;
+        }
+
+        /* ── live dot ── */
+        .live-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: pulse-dot 1.8s infinite;
+        }
+        @keyframes pulse-dot {
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.4;
+                transform: scale(0.7);
+            }
+        }
+
+        /* ── gradient text ── */
+        .gradient-text {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ── scrollbar ── */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c1c9d6;
+            border-radius: 8px;
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #1a1a2e;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #3a3a5a;
+        }
+
+        /* ── widget wrapper ── */
+        .widget-wrapper iframe {
+            border-radius: 1rem !important;
+        }
+        .lcw-widget-5 {
+            padding: 4px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ====== NAV ====== -->
+    <header class="glass-nav sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 lg:h-20">
+                <!-- logo -->
+                <div class="flex items-center gap-3 shrink-0">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#0052ff] to-[#7c3aed] text-white flex items-center justify-center text-xl font-bold shadow-lg shadow-blue-500/25">A</div>
+                    <span class="text-2xl font-bold tracking-tight gradient-text">Aether<span style="-webkit-text-fill-color:#0052ff;background-clip:text;">Ex</span></span>
+                </div>
+                <!-- nav desktop -->
+                <nav class="hidden md:flex items-center gap-7 font-medium text-[#1a2a4a] dark:text-gray-300">
+                    <a href="#" class="flex items-center gap-2 hover:text-[#0052ff] transition border-b-2 border-transparent hover:border-[#0052ff] pb-0.5">Explore</a>
+                    <a href="#" class="flex items-center gap-2 hover:text-[#0052ff] transition border-b-2 border-transparent hover:border-[#0052ff] pb-0.5">Learn</a>
+                    <a href="#" class="flex items-center gap-2 hover:text-[#0052ff] transition border-b-2 border-transparent hover:border-[#0052ff] pb-0.5">Support</a>
+                    <a href="#" class="flex items-center gap-2 hover:text-[#0052ff] transition border-b-2 border-transparent hover:border-[#0052ff] pb-0.5">Prices</a>
+                </nav>
+                <!-- right -->
+                <div class="flex items-center gap-3 sm:gap-5">
+                    <button id="darkToggle" class="text-[#1a2a4a] dark:text-gray-300 hover:text-[#0052ff] transition text-lg"><i class="fas fa-moon dark:hidden"></i><i class="fas fa-sun hidden dark:inline"></i></button>
+                    <a href="#" id="loginBtn" class="text-[#1a2a4a] dark:text-gray-300 hover:text-[#0052ff] transition font-medium text-sm hidden sm:inline">Sign in</a>
+                    <a href="#" id="getStartedBtn" class="btn-gradient text-white px-5 py-2.5 rounded-full font-semibold text-sm shadow-lg shadow-blue-500/25 flex items-center gap-2"><i class="fas fa-arrow-right"></i> Get started</a>
+                    <button id="menuToggle" class="md:hidden text-[#1a2a4a] dark:text-gray-300 hover:text-[#0052ff] text-2xl focus:outline-none"><i class="fas fa-bars"></i></button>
+                </div>
+            </div>
+            <!-- mobile nav -->
+            <div id="mobileMenu" class="md:hidden bg-white/95 dark:bg-[#0a0a1a]/95 backdrop-blur-sm border-t border-[#e4e7ec] dark:border-[#1a1a3e]">
+                <div class="flex flex-col py-4 space-y-3 text-[#1a2a4a] dark:text-gray-300 font-medium">
+                    <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-[#f0f4fe] dark:hover:bg-[#1a1a3e] rounded-lg">Explore</a>
+                    <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-[#f0f4fe] dark:hover:bg-[#1a1a3e] rounded-lg">Learn</a>
+                    <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-[#f0f4fe] dark:hover:bg-[#1a1a3e] rounded-lg">Support</a>
+                    <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-[#f0f4fe] dark:hover:bg-[#1a1a3e] rounded-lg">Prices</a>
+                    <hr class="border-[#e4e7ec] dark:border-[#1a1a3e]" />
+                    <a href="#" class="flex items-center gap-2 px-4 py-2 text-[#0052ff] font-semibold">Sign in</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ====== LIVECOINWATCH WIDGET 5 (MARQUEE) ====== -->
+    <div class="bg-white/50 dark:bg-[#0a0a1a]/50 backdrop-blur-sm border-b border-[#e4e7ec] dark:border-[#1a1a3e] py-1">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="livecoinwatch-widget-5" lcw-base="USD" lcw-color-tx="#1a2a4a" lcw-marquee-1="coins" lcw-marquee-2="movers" lcw-marquee-items="10"></div>
+        </div>
+    </div>
+
+    <!-- ====== HERO ====== -->
+    <section class="hero-gradient-bg relative overflow-hidden px-4 py-16 md:py-24 lg:py-28">
+        <div class="hero-shape hero-shape-1"></div>
+        <div class="hero-shape hero-shape-2"></div>
+        <div class="max-w-6xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <!-- left content -->
+            <div>
+                <span class="inline-block glass rounded-full text-[#0052ff] dark:text-[#6b9aff] text-xs font-bold tracking-wider px-5 py-2 border border-[rgba(0,82,255,0.12)] shadow-sm mb-5">
+                    <span class="live-dot mr-2 align-middle"></span> LIVE · 24/7 GLOBAL MARKETS
+                </span>
+                <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-[1.08] tracking-tight text-[#0b1120] dark:text-white">
+                    The most trusted<br />
+                    <span class="gradient-text">crypto exchange</span>
+                </h1>
+                <p class="text-base sm:text-lg md:text-xl text-[#1a2a4a] dark:text-gray-400 max-w-lg mt-5 leading-relaxed">
+                    Buy, sell, and trade digital assets with confidence. Secure, simple, and built for everyone.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 mt-8">
+                    <a href="#" class="btn-gradient px-8 py-3.5 rounded-full font-semibold shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2"><i class="fas fa-arrow-right"></i> Get started</a>
+                    <a href="#" class="btn-secondary px-8 py-3.5 rounded-full font-semibold flex items-center justify-center gap-2 border border-[rgba(0,82,255,0.12)]"><i class="fas fa-play-circle"></i> Watch demo</a>
+                </div>
+                <!-- trust badges -->
+                <div class="flex flex-wrap gap-6 mt-10">
+                    <div><span class="text-2xl font-bold text-[#0b1120] dark:text-white">$1T+</span><span class="block text-xs text-[#1a2a4a] dark:text-gray-400">Trading volume</span></div>
+                    <div><span class="text-2xl font-bold text-[#0b1120] dark:text-white">10M+</span><span class="block text-xs text-[#1a2a4a] dark:text-gray-400">Users worldwide</span></div>
+                    <div><span class="text-2xl font-bold text-[#0b1120] dark:text-white">100+</span><span class="block text-xs text-[#1a2a4a] dark:text-gray-400">Countries</span></div>
+                </div>
+            </div>
+            <!-- right: mockup / illustration -->
+            <div class="flex justify-center lg:justify-end">
+                <div class="glass rounded-3xl p-6 max-w-sm w-full border border-[rgba(255,255,255,0.3)] dark:border-[rgba(255,255,255,0.05)] shadow-2xl">
+                    <div class="bg-[#f0f4fe] dark:bg-[#1a1a3e] rounded-2xl p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-sm font-semibold text-[#0b1120] dark:text-white">BTC/USD</span>
+                            <span class="text-sm text-[#06d6a0] font-semibold">+2.4%</span>
+                        </div>
+                        <div class="h-20 bg-gradient-to-r from-[#0052ff]/20 to-[#7c3aed]/20 rounded-xl"></div>
+                        <div class="flex justify-between mt-3 text-xs text-[#1a2a4a] dark:text-gray-400">
+                            <span>$43,250.00</span>
+                            <span>24h volume: $28B</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex justify-between text-sm">
+                        <span class="text-[#1a2a4a] dark:text-gray-400">Balance</span>
+                        <span class="font-bold text-[#0b1120] dark:text-white">$24,520.40</span>
+                    </div>
+                    <div class="mt-3 flex gap-2">
+                        <button class="flex-1 btn-success text-white py-2 rounded-xl font-semibold text-sm">Buy</button>
+                        <button class="flex-1 bg-[#ef4444] text-white py-2 rounded-xl font-semibold text-sm">Sell</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== FEATURES SECTION ====== -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+        <div class="text-center mb-12">
+            <span class="text-[#0052ff] dark:text-[#6b9aff] text-sm font-semibold tracking-widest uppercase">Why AetherEx</span>
+            <h2 class="text-3xl md:text-4xl font-bold text-[#0b1120] dark:text-white mt-2">Built for the <span class="gradient-text">future of finance</span></h2>
+            <p class="text-[#1a2a4a] dark:text-gray-400 max-w-2xl mx-auto mt-3">Everything you need to trade, invest, and manage your digital assets with confidence.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            <div class="card-premium p-6 md:p-8 text-center">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#0052ff]/10 to-[#7c3aed]/10 flex items-center justify-center mx-auto mb-5"><i class="fas fa-shield-alt text-3xl text-[#0052ff] dark:text-[#6b9aff]"></i></div>
+                <h3 class="text-xl font-bold text-[#0b1120] dark:text-white">Bank-grade security</h3>
+                <p class="text-sm text-[#1a2a4a] dark:text-gray-400 mt-2 leading-relaxed">Multi-factor authentication, cold storage, and real-time monitoring protect your assets 24/7.</p>
+            </div>
+            <div class="card-premium p-6 md:p-8 text-center">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#0052ff]/10 to-[#7c3aed]/10 flex items-center justify-center mx-auto mb-5"><i class="fas fa-bolt text-3xl text-[#0052ff] dark:text-[#6b9aff]"></i></div>
+                <h3 class="text-xl font-bold text-[#0b1120] dark:text-white">Lightning execution</h3>
+                <p class="text-sm text-[#1a2a4a] dark:text-gray-400 mt-2 leading-relaxed">Trade with sub-second latency and deep liquidity pools for the best prices available.</p>
+            </div>
+            <div class="card-premium p-6 md:p-8 text-center">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#0052ff]/10 to-[#7c3aed]/10 flex items-center justify-center mx-auto mb-5"><i class="fas fa-chart-line text-3xl text-[#0052ff] dark:text-[#6b9aff]"></i></div>
+                <h3 class="text-xl font-bold text-[#0b1120] dark:text-white">Advanced analytics</h3>
+                <p class="text-sm text-[#1a2a4a] dark:text-gray-400 mt-2 leading-relaxed">Real-time charts, market depth, and portfolio insights to inform every decision.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== LIVECOINWATCH WIDGET 3 (DETAILED) ====== -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+        <div class="card-premium p-4 md:p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold text-[#0b1120] dark:text-white">Live Market Overview <span class="text-sm font-normal text-[#1a2a4a] dark:text-gray-400 ml-2">real-time data</span></h3>
+            </div>
+            <div class="livecoinwatch-widget-3" lcw-base="USD" lcw-d-head="true" lcw-d-name="true" lcw-d-code="true" lcw-d-icon="true" lcw-color-tx="#0b1120" lcw-color-bg="#ffffff" lcw-border-w="1"></div>
+        </div>
+    </section>
+
+    <!-- ====== STATS / TRUST SECTION ====== -->
+    <section class="bg-white dark:bg-[#12122a] py-16 border-y border-[#eef2f6] dark:border-[#1a1a3e]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div><p class="text-4xl font-bold text-[#0b1120] dark:text-white">$1T+</p><p class="text-sm text-[#1a2a4a] dark:text-gray-400 mt-1">Total trading volume</p></div>
+                <div><p class="text-4xl font-bold text-[#0b1120] dark:text-white">10M+</p><p class="text-sm text-[#1a2a4a] dark:text-gray-400 mt-1">Users worldwide</p></div>
+                <div><p class="text-4xl font-bold text-[#0b1120] dark:text-white">100+</p><p class="text-sm text-[#1a2a4a] dark:text-gray-400 mt-1">Countries supported</p></div>
+                <div><p class="text-4xl font-bold text-[#0b1120] dark:text-white">99.9%</p><p class="text-sm text-[#1a2a4a] dark:text-gray-400 mt-1">Uptime guarantee</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== CTA SECTION ====== -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+        <div class="glass rounded-3xl p-8 md:p-12 text-center border border-[rgba(255,255,255,0.2)] dark:border-[rgba(255,255,255,0.04)] shadow-premium">
+            <h2 class="text-3xl md:text-4xl font-bold text-[#0b1120] dark:text-white">Start your <span class="gradient-text">crypto journey</span> today</h2>
+            <p class="text-[#1a2a4a] dark:text-gray-400 max-w-xl mx-auto mt-3">Join millions of users who trust AetherEx for their digital asset needs.</p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4 mt-8">
+                <a href="#" class="btn-gradient px-8 py-3.5 rounded-full font-semibold shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2"><i class="fas fa-arrow-right"></i> Get started</a>
+                <a href="#" class="btn-secondary px-8 py-3.5 rounded-full font-semibold flex items-center justify-center gap-2 border border-[rgba(0,82,255,0.12)]">Learn more</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== FOOTER ====== -->
+    <footer class="bg-[#0b1120] dark:bg-[#050510] text-[#8a9bb5] pt-12 pb-6 border-t border-[#1a2a4a] dark:border-[#1a1a3e] text-center text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p><i class="fas fa-copyright mr-1.5"></i> 2026 AetherEx · All rights reserved · <span class="text-[#5a6e8a]">Prices powered by LiveCoinWatch</span></p>
+            <div class="flex flex-wrap justify-center gap-4 mt-3 text-xs text-[#5a6e8a] dark:text-gray-500">
+                <a href="#" class="hover:text-white transition">Privacy</a>
+                <a href="#" class="hover:text-white transition">Terms</a>
+                <a href="#" class="hover:text-white transition">Support</a>
+                <a href="#" class="hover:text-white transition">Status</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ====== AUTH MODAL (optional) ====== -->
+    <div id="authModal" class="fixed inset-0 z-50 modal-overlay hidden items-center justify-center p-4" style="background:rgba(0,0,0,0.5); backdrop-filter:blur(8px);">
+        <div class="bg-white dark:bg-[#12122a] rounded-3xl shadow-2xl max-w-md w-full p-6 relative border border-[rgba(255,255,255,0.05)]">
+            <button id="closeAuthModal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"><i class="fas fa-times text-xl"></i></button>
+            <div class="text-center mb-5">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#0052ff]/10 to-[#7c3aed]/10 flex items-center justify-center mx-auto mb-3"><i class="fas fa-user-circle text-4xl text-[#0052ff]"></i></div>
+                <h3 class="text-2xl font-bold text-[#0b1120] dark:text-white">Sign in</h3>
+                <p class="text-sm text-[#1a2a4a] dark:text-gray-400">Access your AetherEx account</p>
+            </div>
+            <form id="authForm">
+                <div class="space-y-4">
+                    <div><label class="block text-sm font-medium text-[#1a2a4a] dark:text-gray-300">Username or email</label><input type="text" class="w-full mt-1.5 px-4 py-2.5 border border-[#e4e7ec] dark:border-[#1a1a3e] rounded-xl bg-white dark:bg-[#0a0a1a] text-[#0b1120] dark:text-white focus:ring-2 focus:ring-[#0052ff] outline-none" placeholder="username@example.com" /></div>
+                    <div><label class="block text-sm font-medium text-[#1a2a4a] dark:text-gray-300">Password</label><input type="password" class="w-full mt-1.5 px-4 py-2.5 border border-[#e4e7ec] dark:border-[#1a1a3e] rounded-xl bg-white dark:bg-[#0a0a1a] text-[#0b1120] dark:text-white focus:ring-2 focus:ring-[#0052ff] outline-none" placeholder="••••••••" /></div>
+                </div>
+                <button type="submit" class="w-full btn-primary text-white font-semibold py-3 rounded-xl mt-6 transition">Sign in</button>
+                <p class="text-center text-sm text-[#1a2a4a] dark:text-gray-400 mt-4">
+                    Don't have an account? <a href="#" class="text-[#0052ff] font-semibold hover:underline">Sign up</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- ====== JAVASCRIPT ====== -->
+    <script>
+        (function() {
+            // ─── DARK MODE ───
+            const darkToggle = document.getElementById('darkToggle');
+            darkToggle.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+            });
+            if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
+
+            // ─── MOBILE MENU ───
+            const menuToggle = document.getElementById('menuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+            menuToggle.addEventListener('click', () => {
+                mobileMenu.classList.toggle('open');
+            });
+
+            // ─── AUTH MODAL ───
+            const loginBtn = document.getElementById('loginBtn');
+            const authModal = document.getElementById('authModal');
+            const closeAuthModal = document.getElementById('closeAuthModal');
+            const getStartedBtn = document.getElementById('getStartedBtn');
+
+            function openModal() {
+                authModal.style.display = 'flex';
+                authModal.classList.remove('hidden');
+            }
+
+            function closeModal() {
+                authModal.classList.add('hidden');
+                authModal.style.display = 'none';
+            }
+
+            loginBtn.addEventListener('click', (e) => { e.preventDefault();
+                openModal(); });
+            getStartedBtn.addEventListener('click', (e) => { e.preventDefault();
+                openModal(); });
+            // Also any "Get started" buttons in the page
+            document.querySelectorAll('.btn-gradient, .btn-primary').forEach(btn => {
+                if (btn.textContent.trim().includes('Get started') || btn.textContent.trim().includes('Sign up')) {
+                    btn.addEventListener('click', (e) => {
+                        if (e.target.closest('.btn-gradient') || e.target.closest('.btn-primary')) {
+                            e.preventDefault();
+                            openModal();
+                        }
+                    });
+                }
+            });
+
+            closeAuthModal.addEventListener('click', closeModal);
+            authModal.addEventListener('click', (e) => { if (e.target === authModal) closeModal(); });
+
+            // ─── FORM SUBMIT (demo) ───
+            document.getElementById('authForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert('Sign in simulated. Welcome to AetherEx!');
+                closeModal();
+            });
+
+            // ─── WIDGETS RELOAD ───
+            // The LiveCoinWatch widgets load automatically via the script.
+            // If needed, we can trigger a reload after dark mode toggle (but they adapt via CSS).
+
+        })();
+    </script>
+
+</body>
+</html>
