@@ -1,609 +1,1065 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5" />
-  <title>AetherEx · Premium Crypto Exchange</title>
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-  <style>
-    /* premium polish */
-    body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f4f6f9; transition: background 0.3s, color 0.3s; }
-    .glass-nav { background: rgba(255,255,255,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(0,0,0,0.04); }
-    .dark .glass-nav { background: rgba(15,23,42,0.92); border-bottom: 1px solid rgba(255,255,255,0.05); }
-    .card-hover { transition: all 0.2s; border: 1px solid #edf2f7; }
-    .dark .card-hover { border-color: #334155; background: #1e293b; }
-    .card-hover:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -8px rgba(0,0,0,0.08); }
-    .btn-primary { background: #006aff; transition: 0.15s; }
-    .btn-primary:hover { background: #004bb5; transform: scale(1.02); }
-    .btn-success { background: #16a34a; transition: 0.15s; }
-    .btn-success:hover { background: #15803d; transform: scale(1.02); }
-    .btn-danger { background: #dc2626; transition: 0.15s; }
-    .btn-danger:hover { background: #b91c1c; transform: scale(1.02); }
-    .gradient-text { background: linear-gradient(145deg, #0b1d3a, #1f3d6b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .dark .gradient-text { background: linear-gradient(145deg, #a5c9ff, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .tab-active { border-bottom: 2px solid #006aff; color: #006aff; font-weight: 600; }
-    .tab-inactive { color: #4d637f; border-bottom: 2px solid transparent; }
-    .dark .tab-inactive { color: #94a3b8; }
-    .modal-overlay { background: rgba(0,0,0,0.6); backdrop-filter: blur(6px); }
-    #mobileMenu { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
-    #mobileMenu.open { max-height: 500px; }
-    .stat-card { background: white; border-radius: 1rem; padding: 1.25rem; border: 1px solid #eef2f6; }
-    .dark .stat-card { background: #1e293b; border-color: #334155; }
-    .view { display: none; }
-    .view.active { display: block; }
-    .crypto-row { transition: background 0.1s; cursor: pointer; }
-    .crypto-row:hover { background: #f0f4fe; }
-    .dark .crypto-row:hover { background: #1e293b; }
-    .animate-pulse-slow { animation: pulse-slow 2s infinite; }
-    @keyframes pulse-slow { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
-    /* scroll */
-    ::-webkit-scrollbar { width: 5px; }
-    ::-webkit-scrollbar-track { background: #f1f1f1; }
-    ::-webkit-scrollbar-thumb { background: #c1c9d6; border-radius: 8px; }
-    .dark ::-webkit-scrollbar-track { background: #1e293b; }
-    .dark ::-webkit-scrollbar-thumb { background: #475569; }
-    .chart-container { height: 260px; }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5" />
+    <title>AetherEx · Premium Crypto Exchange</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+    <!-- LiveCoinWatch Widget Scripts -->
+    <script defer src="https://www.livecoinwatch.com/static/lcw-widget.js"></script>
+    <style>
+        /* ── premium design system ── */
+        :root {
+            --primary: #0052ff;
+            --primary-dark: #003dcc;
+            --primary-light: #e8edff;
+            --secondary: #7c3aed;
+            --accent: #06d6a0;
+            --gradient-1: linear-gradient(135deg, #0052ff 0%, #7c3aed 50%, #06d6a0 100%);
+            --gradient-2: linear-gradient(135deg, #0a0a1a 0%, #1a1a3e 50%, #0a0a1a 100%);
+            --glass-bg: rgba(255, 255, 255, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --shadow-premium: 0 20px 60px -15px rgba(0, 82, 255, 0.15);
+        }
+        * {
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s, transform 0.25s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.3s;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fb;
+            color: #0b1120;
+            -webkit-font-smoothing: antialiased;
+        }
+        .dark body {
+            background: #0a0a1a;
+            color: #e8edf5;
+        }
+
+        /* ── glassmorphism ── */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+        }
+        .dark .glass {
+            background: rgba(10, 10, 30, 0.7);
+            border-color: rgba(255, 255, 255, 0.06);
+        }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+        }
+        .dark .glass-nav {
+            background: rgba(10, 10, 26, 0.85);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        /* ── buttons ── */
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            transition: all 0.25s;
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 12px 30px -8px rgba(0, 82, 255, 0.35);
+        }
+        .btn-secondary {
+            background: rgba(0, 82, 255, 0.08);
+            color: var(--primary);
+            transition: all 0.25s;
+        }
+        .btn-secondary:hover {
+            background: rgba(0, 82, 255, 0.16);
+            transform: translateY(-2px);
+        }
+        .dark .btn-secondary {
+            background: rgba(0, 82, 255, 0.15);
+            color: #6b9aff;
+        }
+        .dark .btn-secondary:hover {
+            background: rgba(0, 82, 255, 0.25);
+        }
+        .btn-success {
+            background: var(--accent);
+            color: #fff;
+            transition: all 0.25s;
+        }
+        .btn-success:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 12px 30px -8px rgba(6, 214, 160, 0.35);
+        }
+        .btn-gradient {
+            background: var(--gradient-1);
+            color: #fff;
+            transition: all 0.25s;
+        }
+        .btn-gradient:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 12px 40px -8px rgba(0, 82, 255, 0.4);
+        }
+
+        /* ── cards ── */
+        .card-premium {
+            background: #fff;
+            border-radius: 1.5rem;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+        }
+        .card-premium:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-premium);
+            border-color: rgba(0, 82, 255, 0.08);
+        }
+        .dark .card-premium {
+            background: #12122a;
+            border-color: rgba(255, 255, 255, 0.04);
+        }
+        .dark .card-premium:hover {
+            box-shadow: 0 20px 60px -15px rgba(0, 82, 255, 0.08);
+            border-color: rgba(0, 82, 255, 0.12);
+        }
+
+        /* ── hero ── */
+        .hero-gradient-bg {
+            background: radial-gradient(ellipse at 20% 50%, rgba(0, 82, 255, 0.12) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(124, 58, 237, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(6, 214, 160, 0.06) 0%, transparent 40%),
+                #f5f7fb;
+        }
+        .dark .hero-gradient-bg {
+            background: radial-gradient(ellipse at 20% 50%, rgba(0, 82, 255, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(124, 58, 237, 0.10) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(6, 214, 160, 0.06) 0%, transparent 40%),
+                #0a0a1a;
+        }
+        .hero-shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+        }
+        .hero-shape-1 {
+            width: 400px;
+            height: 400px;
+            background: rgba(0, 82, 255, 0.10);
+            top: -100px;
+            right: -100px;
+        }
+        .hero-shape-2 {
+            width: 300px;
+            height: 300px;
+            background: rgba(124, 58, 237, 0.08);
+            bottom: -80px;
+            left: -80px;
+        }
+        .dark .hero-shape-1 {
+            background: rgba(0, 82, 255, 0.12);
+        }
+        .dark .hero-shape-2 {
+            background: rgba(124, 58, 237, 0.10);
+        }
+
+        /* ── mobile menu ── */
+        #mobileMenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease;
+        }
+        #mobileMenu.open {
+            max-height: 500px;
+        }
+
+        /* ── table rows ── */
+        .crypto-row {
+            transition: background 0.15s;
+            cursor: default;
+        }
+        .crypto-row:hover {
+            background: rgba(0, 82, 255, 0.04);
+        }
+        .dark .crypto-row:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        /* ── chart ── */
+        .chart-container {
+            height: 260px;
+            position: relative;
+        }
+
+        /* ── modal ── */
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        /* ── scrollbar ── */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c1c9d6;
+            border-radius: 8px;
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #1a1a2e;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #3a3a5a;
+        }
+
+        /* ── utility ── */
+        .gradient-text {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .shadow-premium {
+            box-shadow: var(--shadow-premium);
+        }
+        .border-gradient {
+            border-image: var(--gradient-1) 1;
+            border-image-slice: 1;
+        }
+
+        /* ── live dot ── */
+        .live-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: pulse-dot 1.8s infinite;
+        }
+        @keyframes pulse-dot {
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.4;
+                transform: scale(0.7);
+            }
+        }
+
+        /* ── responsive tweaks ── */
+        @media (max-width: 640px) {
+            .hero-title {
+                font-size: 2.25rem;
+                line-height: 1.2;
+            }
+            .stat-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+        }
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .hero-title {
+                font-size: 3.25rem;
+            }
+        }
+
+        /* Widget container spacing */
+        .widget-wrapper {
+            padding: 1.5rem 0;
+        }
+        .widget-wrapper iframe {
+            border-radius: 1rem !important;
+        }
+    </style>
 </head>
-<body class="bg-[#f4f6f9] text-[#0b1d3a] dark:bg-darkbg dark:text-gray-200">
+<body>
 
-<!-- ========== TOP NAV ========== -->
-<header class="glass-nav sticky top-0 z-50 transition-colors">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-center justify-between h-16 lg:h-20">
-      <!-- logo -->
-      <div class="flex items-center gap-3 shrink-0 cursor-pointer" onclick="showDashboard()">
-        <div class="w-9 h-9 rounded-xl bg-primary text-white flex items-center justify-center text-xl font-bold shadow-lg shadow-blue-500/20">A</div>
-        <span class="text-2xl font-bold tracking-tight gradient-text">Aether<span class="text-primary">Ex</span></span>
-      </div>
-      <!-- nav links -->
-      <nav class="hidden md:flex items-center gap-6 font-medium text-[#2d3e5f] dark:text-gray-300">
-        <a href="#" class="flex items-center gap-2 hover:text-primary transition border-b-2 border-transparent hover:border-primary pb-1"><i class="fas fa-chart-pie text-primary"></i> Dashboard</a>
-        <a href="#" class="flex items-center gap-2 hover:text-primary transition border-b-2 border-transparent hover:border-primary pb-1"><i class="fas fa-coins text-primary"></i> Markets</a>
-        <a href="#" class="flex items-center gap-2 hover:text-primary transition border-b-2 border-transparent hover:border-primary pb-1"><i class="fas fa-wallet text-primary"></i> Wallet</a>
-        <a href="#" class="flex items-center gap-2 hover:text-primary transition border-b-2 border-transparent hover:border-primary pb-1"><i class="fas fa-arrow-right-arrow-left text-primary"></i> Trade</a>
-      </nav>
-      <!-- right actions -->
-      <div class="flex items-center gap-3 sm:gap-5">
-        <button id="darkToggle" class="text-[#2d3e5f] dark:text-gray-300 hover:text-primary transition text-lg"><i class="fas fa-moon dark:hidden"></i><i class="fas fa-sun hidden dark:inline"></i></button>
-        <button class="hidden sm:inline-flex text-[#2d3e5f] dark:text-gray-300 hover:text-primary transition text-lg relative"><i class="far fa-bell"></i><span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-[10px] text-white rounded-full flex items-center justify-center">2</span></button>
-        <div id="userActions" class="flex items-center gap-2"></div>
-        <button id="menuToggle" class="md:hidden text-[#2d3e5f] dark:text-gray-300 hover:text-primary text-2xl focus:outline-none"><i class="fas fa-bars"></i></button>
-      </div>
+    <!-- ====== NAV ====== -->
+    <header class="glass-nav sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 lg:h-20">
+                <!-- logo -->
+                <div class="flex items-center gap-3 shrink-0 cursor-pointer" onclick="showDashboard()">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#0052ff] to-[#7c3aed] text-white flex items-center justify-center text-xl font-bold shadow-lg shadow-blue-500/25">A</div>
+                    <span class="text-2xl font-bold tracking-tight gradient-text">Aether<span style="-webkit-text-fill-color:#0052ff;background-clip:text;">Ex</span></span>
+                </div>
+                <!-- nav desktop -->
+                <nav class="hidden md:flex items-center gap-7 font-medium text-[#1a2a4a] dark:text-gray-300">
+                    <a href="#" class="flex items-center gap-2 hover:text-[#0052ff] transition border-b-2 border-transparent hover:border-[#0052ff] pb-0.5"><i class="fas fa-chart-pie text-[#0052ff]"></i> Dashboard</a>
+                    <a href="#" class="flex items-center gap-2 hover:text-[#0052ff] transition border-b-2 border-transparent hover:border-[#0052ff] pb-0.5"><i class="fas fa-coins text-[#0052ff]"></i> Markets</a>
+                    <a href="#" class="flex items-center gap-2 hover:text-[#0052ff] transition border-b-2 border-transparent hover:border-[#0052ff] pb-0.5"><i class="fas fa-wallet text-[#0052ff]"></i> Wallet</a>
+                    <a href="#" class="flex items-center gap-2 hover:text-[#0052ff] transition border-b-2 border-transparent hover:border-[#0052ff] pb-0.5"><i class="fas fa-arrow-right-arrow-left text-[#0052ff]"></i> Trade</a>
+                </nav>
+                <!-- right -->
+                <div class="flex items-center gap-3 sm:gap-5">
+                    <button id="darkToggle" class="text-[#1a2a4a] dark:text-gray-300 hover:text-[#0052ff] transition text-lg"><i class="fas fa-moon dark:hidden"></i><i class="fas fa-sun hidden dark:inline"></i></button>
+                    <button class="hidden sm:inline-flex text-[#1a2a4a] dark:text-gray-300 hover:text-[#0052ff] transition text-lg relative"><i class="far fa-bell"></i><span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-[10px] text-white rounded-full flex items-center justify-center">3</span></button>
+                    <div id="userActions" class="flex items-center gap-2"></div>
+                    <button id="menuToggle" class="md:hidden text-[#1a2a4a] dark:text-gray-300 hover:text-[#0052ff] text-2xl focus:outline-none"><i class="fas fa-bars"></i></button>
+                </div>
+            </div>
+            <!-- mobile nav -->
+            <div id="mobileMenu" class="md:hidden bg-white/95 dark:bg-[#0a0a1a]/95 backdrop-blur-sm border-t border-[#e4e7ec] dark:border-[#1a1a3e]">
+                <div class="flex flex-col py-4 space-y-3 text-[#1a2a4a] dark:text-gray-300 font-medium">
+                    <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-[#f0f4fe] dark:hover:bg-[#1a1a3e] rounded-lg"><i class="fas fa-chart-pie text-[#0052ff] w-6"></i> Dashboard</a>
+                    <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-[#f0f4fe] dark:hover:bg-[#1a1a3e] rounded-lg"><i class="fas fa-coins text-[#0052ff] w-6"></i> Markets</a>
+                    <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-[#f0f4fe] dark:hover:bg-[#1a1a3e] rounded-lg"><i class="fas fa-wallet text-[#0052ff] w-6"></i> Wallet</a>
+                    <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-[#f0f4fe] dark:hover:bg-[#1a1a3e] rounded-lg"><i class="fas fa-arrow-right-arrow-left text-[#0052ff] w-6"></i> Trade</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ====== LIVECOINWATCH WIDGET 5 (MARQUEE) ====== -->
+    <div class="bg-white/50 dark:bg-[#0a0a1a]/50 backdrop-blur-sm border-b border-[#e4e7ec] dark:border-[#1a1a3e] py-1">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="livecoinwatch-widget-5" lcw-base="USD" lcw-color-tx="#1a2a4a" lcw-marquee-1="coins" lcw-marquee-2="movers" lcw-marquee-items="10"></div>
+        </div>
     </div>
-    <!-- mobile nav -->
-    <div id="mobileMenu" class="md:hidden bg-white/95 dark:bg-darkbg/95 backdrop-blur-sm border-t border-[#e4e7ec] dark:border-[#334155]">
-      <div class="flex flex-col py-4 space-y-3 text-[#2d3e5f] dark:text-gray-300 font-medium">
-        <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-[#f0f4fe] dark:hover:bg-[#1e293b] rounded-lg"><i class="fas fa-chart-pie text-primary w-6"></i> Dashboard</a>
-        <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-[#f0f4fe] dark:hover:bg-[#1e293b] rounded-lg"><i class="fas fa-coins text-primary w-6"></i> Markets</a>
-        <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-[#f0f4fe] dark:hover:bg-[#1e293b] rounded-lg"><i class="fas fa-wallet text-primary w-6"></i> Wallet</a>
-        <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-[#f0f4fe] dark:hover:bg-[#1e293b] rounded-lg"><i class="fas fa-arrow-right-arrow-left text-primary w-6"></i> Trade</a>
-      </div>
+
+    <!-- ====== HERO ====== -->
+    <section class="hero-gradient-bg relative overflow-hidden px-4 py-16 md:py-24 lg:py-28">
+        <div class="hero-shape hero-shape-1"></div>
+        <div class="hero-shape hero-shape-2"></div>
+        <div class="max-w-5xl mx-auto text-center relative z-10">
+            <span class="inline-block glass rounded-full text-[#0052ff] dark:text-[#6b9aff] text-xs font-bold tracking-wider px-5 py-2 border border-[rgba(0,82,255,0.12)] shadow-sm mb-5">
+                <span class="live-dot mr-2 align-middle"></span> LIVE · 24/7 GLOBAL MARKETS
+            </span>
+            <h1 class="hero-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.08] tracking-tight text-[#0b1120] dark:text-white">
+                Trade crypto<br />
+                <span class="gradient-text">with confidence</span>
+            </h1>
+            <p class="text-base sm:text-lg md:text-xl text-[#1a2a4a] dark:text-gray-400 max-w-2xl mx-auto mt-5 leading-relaxed">
+                The most trusted platform for digital assets. Real-time prices, deep liquidity,<br class="hidden sm:block" />
+                advanced security, and zero hidden fees — all in one place.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4 mt-8">
+                <button id="heroBuyBtn" class="btn-gradient px-8 py-3.5 rounded-full font-semibold shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2"><i class="fas fa-plus-circle"></i> Get started</button>
+                <button class="btn-secondary px-8 py-3.5 rounded-full font-semibold flex items-center justify-center gap-2 border border-[rgba(0,82,255,0.12)]"><i class="fas fa-play-circle"></i> Watch demo</button>
+            </div>
+            <!-- stats -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-8 mt-14 max-w-3xl mx-auto">
+                <div class="glass rounded-2xl p-4 sm:p-5 text-center border border-[rgba(255,255,255,0.2)] dark:border-[rgba(255,255,255,0.04)]">
+                    <p class="text-2xl sm:text-3xl font-bold text-[#0b1120] dark:text-white" id="heroVolume">$28.4B</p>
+                    <p class="text-xs sm:text-sm text-[#1a2a4a] dark:text-gray-400">24h Volume</p>
+                </div>
+                <div class="glass rounded-2xl p-4 sm:p-5 text-center border border-[rgba(255,255,255,0.2)] dark:border-[rgba(255,255,255,0.04)]">
+                    <p class="text-2xl sm:text-3xl font-bold text-[#0b1120] dark:text-white">10M+</p>
+                    <p class="text-xs sm:text-sm text-[#1a2a4a] dark:text-gray-400">Users</p>
+                </div>
+                <div class="glass rounded-2xl p-4 sm:p-5 text-center border border-[rgba(255,255,255,0.2)] dark:border-[rgba(255,255,255,0.04)]">
+                    <p class="text-2xl sm:text-3xl font-bold text-[#0b1120] dark:text-white">200+</p>
+                    <p class="text-xs sm:text-sm text-[#1a2a4a] dark:text-gray-400">Countries</p>
+                </div>
+                <div class="glass rounded-2xl p-4 sm:p-5 text-center border border-[rgba(255,255,255,0.2)] dark:border-[rgba(255,255,255,0.04)]">
+                    <p class="text-2xl sm:text-3xl font-bold text-[#0b1120] dark:text-white">99.9%</p>
+                    <p class="text-xs sm:text-sm text-[#1a2a4a] dark:text-gray-400">Uptime</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== WHY AETHEREX ====== -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+        <div class="text-center mb-12">
+            <span class="text-[#0052ff] dark:text-[#6b9aff] text-sm font-semibold tracking-widest uppercase">Why AetherEx</span>
+            <h2 class="text-3xl md:text-4xl font-bold text-[#0b1120] dark:text-white mt-2">Built for the <span class="gradient-text">future of finance</span></h2>
+            <p class="text-[#1a2a4a] dark:text-gray-400 max-w-2xl mx-auto mt-3">Everything you need to trade, invest, and manage your digital assets with confidence.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            <div class="card-premium p-6 md:p-8 text-center">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#0052ff]/10 to-[#7c3aed]/10 flex items-center justify-center mx-auto mb-5"><i class="fas fa-shield-alt text-3xl text-[#0052ff] dark:text-[#6b9aff]"></i></div>
+                <h3 class="text-xl font-bold text-[#0b1120] dark:text-white">Bank-grade security</h3>
+                <p class="text-sm text-[#1a2a4a] dark:text-gray-400 mt-2 leading-relaxed">Multi-factor authentication, cold storage, and real-time monitoring protect your assets 24/7.</p>
+            </div>
+            <div class="card-premium p-6 md:p-8 text-center">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#0052ff]/10 to-[#7c3aed]/10 flex items-center justify-center mx-auto mb-5"><i class="fas fa-bolt text-3xl text-[#0052ff] dark:text-[#6b9aff]"></i></div>
+                <h3 class="text-xl font-bold text-[#0b1120] dark:text-white">Lightning execution</h3>
+                <p class="text-sm text-[#1a2a4a] dark:text-gray-400 mt-2 leading-relaxed">Trade with sub-second latency and deep liquidity pools for the best prices available.</p>
+            </div>
+            <div class="card-premium p-6 md:p-8 text-center">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#0052ff]/10 to-[#7c3aed]/10 flex items-center justify-center mx-auto mb-5"><i class="fas fa-chart-line text-3xl text-[#0052ff] dark:text-[#6b9aff]"></i></div>
+                <h3 class="text-xl font-bold text-[#0b1120] dark:text-white">Advanced analytics</h3>
+                <p class="text-sm text-[#1a2a4a] dark:text-gray-400 mt-2 leading-relaxed">Real-time charts, market depth, and portfolio insights to inform every decision.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== LIVECOINWATCH WIDGET 3 (DETAILED) ====== -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+        <div class="card-premium p-4 md:p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold text-[#0b1120] dark:text-white">Live Market Overview <span class="text-sm font-normal text-[#1a2a4a] dark:text-gray-400 ml-2">powered by LiveCoinWatch</span></h3>
+            </div>
+            <div class="livecoinwatch-widget-3" lcw-base="USD" lcw-d-head="true" lcw-d-name="true" lcw-d-code="true" lcw-d-icon="true" lcw-color-tx="#0b1120" lcw-color-bg="#ffffff" lcw-border-w="1"></div>
+        </div>
+    </section>
+
+    <!-- ====== DASHBOARD ====== -->
+    <div id="app">
+        <div id="dashboardView" class="view active">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+
+                <!-- header -->
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-bold text-[#0b1120] dark:text-white">Dashboard</h2>
+                        <p class="text-[#1a2a4a] dark:text-gray-400">Welcome back, <span id="userName" class="font-semibold text-[#0b1120] dark:text-white">User</span> <span class="live-dot ml-2 align-middle"></span></p>
+                    </div>
+                    <div class="mt-4 md:mt-0 flex items-center gap-4 glass rounded-2xl px-5 py-3 border border-[rgba(255,255,255,0.2)] dark:border-[rgba(255,255,255,0.04)]">
+                        <span class="text-sm font-medium text-[#1a2a4a] dark:text-gray-400">Total balance</span>
+                        <span class="text-2xl font-bold text-[#0b1120] dark:text-white" id="totalBalance">$24,520.40</span>
+                        <span class="text-sm text-[#06d6a0] font-semibold" id="balanceChange"><i class="fas fa-arrow-up"></i> +3.2%</span>
+                    </div>
+                </div>
+
+                <!-- stats -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                    <div class="card-premium p-4 md:p-5"><i class="fas fa-wallet text-2xl text-[#0052ff]"></i><p class="text-xs text-[#1a2a4a] dark:text-gray-400 mt-1">Portfolio</p><p class="text-lg font-bold text-[#0b1120] dark:text-white" id="statPortfolio">$24.5k</p><span class="text-xs text-[#06d6a0]" id="statPortfolioChange">+2.1%</span></div>
+                    <div class="card-premium p-4 md:p-5"><i class="fas fa-coins text-2xl text-[#0052ff]"></i><p class="text-xs text-[#1a2a4a] dark:text-gray-400 mt-1">Assets</p><p class="text-lg font-bold text-[#0b1120] dark:text-white" id="statAssets">6</p><span class="text-xs text-[#1a2a4a] dark:text-gray-400">3 active</span></div>
+                    <div class="card-premium p-4 md:p-5"><i class="fas fa-chart-line text-2xl text-[#0052ff]"></i><p class="text-xs text-[#1a2a4a] dark:text-gray-400 mt-1">24h Volume</p><p class="text-lg font-bold text-[#0b1120] dark:text-white" id="statVolume">$1.2M</p><span class="text-xs text-[#06d6a0]" id="statVolumeChange">+8.5%</span></div>
+                    <div class="card-premium p-4 md:p-5"><i class="fas fa-arrow-trend-up text-2xl text-[#0052ff]"></i><p class="text-xs text-[#1a2a4a] dark:text-gray-400 mt-1">Best performer</p><p class="text-lg font-bold text-[#06d6a0]" id="statBestPerformer">SOL +12%</p></div>
+                </div>
+
+                <!-- chart + actions -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <div class="lg:col-span-2 card-premium p-4 md:p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="font-semibold text-[#0b1120] dark:text-white">Portfolio performance</h3>
+                            <div class="flex gap-1 text-xs"><button class="px-3 py-1 rounded-lg bg-[#0052ff] text-white font-medium">1D</button><button class="px-3 py-1 rounded-lg hover:bg-[#f0f4fe] dark:hover:bg-[#1a1a3e] transition">1W</button><button class="px-3 py-1 rounded-lg hover:bg-[#f0f4fe] dark:hover:bg-[#1a1a3e] transition">1M</button></div>
+                        </div>
+                        <div class="chart-container"><canvas id="portfolioChart"></canvas></div>
+                    </div>
+                    <div class="card-premium p-4 md:p-6 flex flex-col gap-3">
+                        <h3 class="font-semibold text-[#0b1120] dark:text-white">Quick actions</h3>
+                        <button id="buyBtn" class="btn-success text-white py-2.5 rounded-xl font-semibold"><i class="fas fa-plus-circle"></i> Buy crypto</button>
+                        <button id="sellBtn" class="bg-[#ef4444] text-white py-2.5 rounded-xl font-semibold hover:bg-[#dc2626] transition hover:scale-[1.02]"><i class="fas fa-minus-circle"></i> Sell crypto</button>
+                        <button class="btn-primary text-white py-2.5 rounded-xl font-semibold"><i class="fas fa-exchange-alt"></i> Trade</button>
+                        <button class="border border-[#e4e7ec] dark:border-[#1a1a3e] py-2.5 rounded-xl font-semibold hover:bg-[#f5f7fb] dark:hover:bg-[#1a1a3e] transition"><i class="fas fa-arrow-right"></i> Withdraw</button>
+                    </div>
+                </div>
+
+                <!-- Second LiveCoinWatch Widget 3 (Detailed) in Dashboard -->
+                <div class="card-premium p-4 md:p-6 mb-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-semibold text-[#0b1120] dark:text-white">Live Price Tracker <span class="text-xs font-normal text-[#1a2a4a] dark:text-gray-400 ml-2">real-time data</span></h3>
+                    </div>
+                    <div class="livecoinwatch-widget-3" lcw-base="USD" lcw-d-head="true" lcw-d-name="true" lcw-d-code="true" lcw-d-icon="true" lcw-color-tx="#0b1120" lcw-color-bg="#ffffff" lcw-border-w="1"></div>
+                </div>
+
+                <!-- market table -->
+                <div class="card-premium p-4 md:p-6 mb-8">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                        <h3 class="font-semibold text-[#0b1120] dark:text-white">Top cryptocurrencies <span class="text-xs font-normal text-[#1a2a4a] dark:text-gray-400 ml-2">live from CoinGecko</span></h3>
+                        <a href="#" class="text-sm text-[#0052ff] font-medium hover:underline">View all <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead class="text-[#1a2a4a] dark:text-gray-400 border-b border-[#eef2f6] dark:border-[#1a1a3e]">
+                                <tr><th class="text-left py-2.5 font-semibold">Asset</th><th class="text-right py-2.5 font-semibold">Price</th><th class="text-right py-2.5 font-semibold hidden sm:table-cell">24h</th><th class="text-right py-2.5 font-semibold hidden md:table-cell">Market cap</th><th class="text-right py-2.5 font-semibold hidden lg:table-cell">Volume</th><th class="text-right py-2.5 font-semibold">Trade</th></tr>
+                            </thead>
+                            <tbody id="marketTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- transactions -->
+                <div class="card-premium p-4 md:p-6">
+                    <h3 class="font-semibold text-[#0b1120] dark:text-white mb-4">Recent transactions</h3>
+                    <div id="transactionList" class="space-y-2"></div>
+                </div>
+
+            </div>
+        </div>
     </div>
-  </div>
-</header>
 
-<!-- ========== APP CONTAINER ========== -->
-<div id="app">
-
-  <!-- ====== DASHBOARD VIEW ====== -->
-  <div id="dashboardView" class="view active">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      <!-- welcome & balance -->
-      <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
-        <div>
-          <h1 class="text-2xl font-bold dark:text-white">Dashboard</h1>
-          <p class="text-sm text-[#5a6e8a] dark:text-gray-400">Welcome back, <span id="userName">User</span></p>
+    <!-- ====== TRADE MODAL ====== -->
+    <div id="tradeModal" class="fixed inset-0 z-50 modal-overlay hidden items-center justify-center p-4">
+        <div class="bg-white dark:bg-[#12122a] rounded-3xl shadow-2xl max-w-md w-full p-6 relative transform transition-all border border-[rgba(255,255,255,0.05)]">
+            <button id="closeTradeModal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"><i class="fas fa-times text-xl"></i></button>
+            <h3 id="tradeModalTitle" class="text-2xl font-bold text-[#0b1120] dark:text-white mb-5">Buy crypto</h3>
+            <form id="tradeForm">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-[#1a2a4a] dark:text-gray-300">Asset</label>
+                    <select id="tradeAsset" class="w-full mt-1.5 px-4 py-2.5 border border-[#e4e7ec] dark:border-[#1a1a3e] rounded-xl bg-white dark:bg-[#0a0a1a] text-[#0b1120] dark:text-white focus:ring-2 focus:ring-[#0052ff] outline-none">
+                        <option value="bitcoin">Bitcoin (BTC)</option>
+                        <option value="ethereum">Ethereum (ETH)</option>
+                        <option value="solana">Solana (SOL)</option>
+                        <option value="usd-coin">USD Coin (USDC)</option>
+                        <option value="ripple">XRP</option>
+                        <option value="cardano">Cardano (ADA)</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-[#1a2a4a] dark:text-gray-300">Amount (USD)</label>
+                    <input type="number" id="tradeAmount" class="w-full mt-1.5 px-4 py-2.5 border border-[#e4e7ec] dark:border-[#1a1a3e] rounded-xl bg-white dark:bg-[#0a0a1a] text-[#0b1120] dark:text-white focus:ring-2 focus:ring-[#0052ff] outline-none" placeholder="100" value="100" />
+                </div>
+                <div class="mb-5">
+                    <label class="block text-sm font-medium text-[#1a2a4a] dark:text-gray-300">Price (USD) <span class="text-xs text-[#1a2a4a] dark:text-gray-400">live</span></label>
+                    <input type="text" id="tradePrice" class="w-full mt-1.5 px-4 py-2.5 border border-[#e4e7ec] dark:border-[#1a1a3e] rounded-xl bg-[#f5f7fb] dark:bg-[#0f0f24] text-[#0b1120] dark:text-white outline-none cursor-default" readonly />
+                </div>
+                <button type="submit" class="w-full btn-primary text-white py-3 rounded-xl font-semibold transition" id="tradeSubmitBtn">Buy</button>
+            </form>
         </div>
-        <div class="mt-4 md:mt-0 flex items-center gap-3">
-          <span class="text-sm font-medium text-[#5a6e8a] dark:text-gray-400">Total balance</span>
-          <span class="text-2xl font-bold dark:text-white" id="totalBalance">$24,520.40</span>
-          <span class="text-sm text-green-600 font-semibold"><i class="fas fa-arrow-up"></i> +3.2%</span>
-        </div>
-      </div>
-
-      <!-- stats cards -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div class="stat-card"><i class="fas fa-wallet text-2xl text-primary"></i><p class="text-sm text-[#5a6e8a] dark:text-gray-400 mt-1">Portfolio</p><p class="text-xl font-bold dark:text-white">$24.5k</p><span class="text-xs text-green-600">+2.1%</span></div>
-        <div class="stat-card"><i class="fas fa-coins text-2xl text-primary"></i><p class="text-sm text-[#5a6e8a] dark:text-gray-400 mt-1">Assets</p><p class="text-xl font-bold dark:text-white">6</p><span class="text-xs text-[#5a6e8a] dark:text-gray-400">3 active</span></div>
-        <div class="stat-card"><i class="fas fa-chart-line text-2xl text-primary"></i><p class="text-sm text-[#5a6e8a] dark:text-gray-400 mt-1">24h volume</p><p class="text-xl font-bold dark:text-white">$1.2M</p><span class="text-xs text-green-600">+8.5%</span></div>
-        <div class="stat-card"><i class="fas fa-arrow-trend-up text-2xl text-primary"></i><p class="text-sm text-[#5a6e8a] dark:text-gray-400 mt-1">Best performer</p><p class="text-xl font-bold dark:text-white text-green-600">SOL +12%</p></div>
-      </div>
-
-      <!-- chart + quick actions -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        <div class="lg:col-span-2 bg-white dark:bg-darkcard rounded-2xl shadow-soft border border-[#eef2f6] dark:border-[#334155] p-4">
-          <div class="flex items-center justify-between mb-2">
-            <h3 class="font-semibold dark:text-white">Portfolio performance</h3>
-            <div class="flex gap-2 text-xs"><button class="px-2 py-1 rounded bg-primary text-white">1D</button><button class="px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-[#1e293b]">1W</button><button class="px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-[#1e293b]">1M</button></div>
-          </div>
-          <div class="chart-container"><canvas id="portfolioChart"></canvas></div>
-        </div>
-        <div class="bg-white dark:bg-darkcard rounded-2xl shadow-soft border border-[#eef2f6] dark:border-[#334155] p-4 flex flex-col gap-3">
-          <h3 class="font-semibold dark:text-white">Quick actions</h3>
-          <button id="buyBtn" class="btn-success text-white py-2.5 rounded-xl font-semibold"><i class="fas fa-plus-circle"></i> Buy crypto</button>
-          <button id="sellBtn" class="btn-danger text-white py-2.5 rounded-xl font-semibold"><i class="fas fa-minus-circle"></i> Sell crypto</button>
-          <button class="btn-primary text-white py-2.5 rounded-xl font-semibold"><i class="fas fa-exchange-alt"></i> Trade</button>
-          <button class="border border-[#e4e7ec] dark:border-[#334155] py-2.5 rounded-xl font-semibold hover:bg-gray-50 dark:hover:bg-[#1e293b]"><i class="fas fa-arrow-right"></i> Withdraw</button>
-        </div>
-      </div>
-
-      <!-- markets table -->
-      <div class="bg-white dark:bg-darkcard rounded-2xl shadow-soft border border-[#eef2f6] dark:border-[#334155] p-4 mb-6">
-        <div class="flex items-center justify-between mb-3">
-          <h3 class="font-semibold dark:text-white">Top cryptocurrencies</h3>
-          <a href="#" class="text-sm text-primary font-medium">View all <i class="fas fa-arrow-right"></i></a>
-        </div>
-        <div class="overflow-x-auto">
-          <table class="w-full text-sm">
-            <thead class="text-[#5a6e8a] dark:text-gray-400 border-b border-[#eef2f6] dark:border-[#334155]">
-              <tr><th class="text-left py-2">Asset</th><th class="text-right py-2">Price</th><th class="text-right py-2 hidden sm:table-cell">24h change</th><th class="text-right py-2 hidden md:table-cell">Market cap</th><th class="text-right py-2">Action</th></tr>
-            </thead>
-            <tbody id="marketTableBody">
-              <!-- dynamic rows -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- transaction history -->
-      <div class="bg-white dark:bg-darkcard rounded-2xl shadow-soft border border-[#eef2f6] dark:border-[#334155] p-4">
-        <h3 class="font-semibold dark:text-white mb-3">Recent transactions</h3>
-        <div id="transactionList" class="space-y-2">
-          <!-- dynamic -->
-        </div>
-      </div>
     </div>
-  </div>
 
-  <!-- ====== TRADE / BUY SELL MODAL ====== -->
-  <div id="tradeModal" class="fixed inset-0 z-50 modal-overlay hidden items-center justify-center p-4">
-    <div class="bg-white dark:bg-darkcard rounded-3xl shadow-2xl max-w-md w-full p-6 relative">
-      <button id="closeTradeModal" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"><i class="fas fa-times text-xl"></i></button>
-      <h3 id="tradeModalTitle" class="text-2xl font-bold dark:text-white mb-4">Buy crypto</h3>
-      <form id="tradeForm">
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-[#2d3e5f] dark:text-gray-300">Asset</label>
-          <select id="tradeAsset" class="w-full mt-1 px-4 py-2 border border-[#e4e7ec] dark:border-[#334155] rounded-xl bg-white dark:bg-darkbg text-[#0b1d3a] dark:text-white focus:ring-2 focus:ring-primary outline-none">
-            <option value="BTC">Bitcoin (BTC)</option>
-            <option value="ETH">Ethereum (ETH)</option>
-            <option value="SOL">Solana (SOL)</option>
-            <option value="USDC">USD Coin (USDC)</option>
-          </select>
+    <!-- ====== AUTH MODAL ====== -->
+    <div id="authModal" class="fixed inset-0 z-50 modal-overlay hidden items-center justify-center p-4">
+        <div class="bg-white dark:bg-[#12122a] rounded-3xl shadow-2xl max-w-md w-full p-6 relative border border-[rgba(255,255,255,0.05)]">
+            <button id="closeAuthModal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"><i class="fas fa-times text-xl"></i></button>
+            <div class="text-center mb-5">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#0052ff]/10 to-[#7c3aed]/10 flex items-center justify-center mx-auto mb-3"><i class="fas fa-user-circle text-4xl text-[#0052ff]"></i></div>
+                <h3 id="authTitle" class="text-2xl font-bold text-[#0b1120] dark:text-white">Sign in</h3>
+                <p id="authSubtitle" class="text-sm text-[#1a2a4a] dark:text-gray-400">Access your portfolio</p>
+            </div>
+            <form id="authForm">
+                <div id="signupFields" class="hidden space-y-4">
+                    <div><label class="block text-sm font-medium text-[#1a2a4a] dark:text-gray-300">Full name</label><input type="text" id="signupName" class="w-full mt-1.5 px-4 py-2.5 border border-[#e4e7ec] dark:border-[#1a1a3e] rounded-xl bg-white dark:bg-[#0a0a1a] text-[#0b1120] dark:text-white focus:ring-2 focus:ring-[#0052ff] outline-none" placeholder="John Doe" /></div>
+                    <div><label class="block text-sm font-medium text-[#1a2a4a] dark:text-gray-300">Email</label><input type="email" id="signupEmail" class="w-full mt-1.5 px-4 py-2.5 border border-[#e4e7ec] dark:border-[#1a1a3e] rounded-xl bg-white dark:bg-[#0a0a1a] text-[#0b1120] dark:text-white focus:ring-2 focus:ring-[#0052ff] outline-none" placeholder="you@example.com" /></div>
+                </div>
+                <div class="space-y-4">
+                    <div><label class="block text-sm font-medium text-[#1a2a4a] dark:text-gray-300">Username</label><input type="text" id="authUsername" class="w-full mt-1.5 px-4 py-2.5 border border-[#e4e7ec] dark:border-[#1a1a3e] rounded-xl bg-white dark:bg-[#0a0a1a] text-[#0b1120] dark:text-white focus:ring-2 focus:ring-[#0052ff] outline-none" placeholder="username" required /></div>
+                    <div><label class="block text-sm font-medium text-[#1a2a4a] dark:text-gray-300">Password</label><input type="password" id="authPassword" class="w-full mt-1.5 px-4 py-2.5 border border-[#e4e7ec] dark:border-[#1a1a3e] rounded-xl bg-white dark:bg-[#0a0a1a] text-[#0b1120] dark:text-white focus:ring-2 focus:ring-[#0052ff] outline-none" placeholder="••••••••" required /></div>
+                </div>
+                <button type="submit" class="w-full btn-primary text-white font-semibold py-3 rounded-xl mt-6 transition">Sign in</button>
+                <p class="text-center text-sm text-[#1a2a4a] dark:text-gray-400 mt-4">
+                    <span id="authToggleText">Don't have an account?</span>
+                    <a href="#" id="authToggleLink" class="text-[#0052ff] font-semibold hover:underline">Sign up</a>
+                </p>
+            </form>
         </div>
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-[#2d3e5f] dark:text-gray-300">Amount (USD)</label>
-          <input type="number" id="tradeAmount" class="w-full mt-1 px-4 py-2 border border-[#e4e7ec] dark:border-[#334155] rounded-xl bg-white dark:bg-darkbg text-[#0b1d3a] dark:text-white focus:ring-2 focus:ring-primary outline-none" placeholder="100" value="100" />
-        </div>
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-[#2d3e5f] dark:text-gray-300">Price (USD)</label>
-          <input type="text" id="tradePrice" class="w-full mt-1 px-4 py-2 border border-[#e4e7ec] dark:border-[#334155] rounded-xl bg-white dark:bg-darkbg text-[#0b1d3a] dark:text-white focus:ring-2 focus:ring-primary outline-none" readonly />
-        </div>
-        <button type="submit" class="w-full btn-primary text-white py-3 rounded-xl font-semibold transition" id="tradeSubmitBtn">Buy</button>
-      </form>
     </div>
-  </div>
 
-</div>
+    <!-- ====== FOOTER ====== -->
+    <footer class="bg-[#0b1120] dark:bg-[#050510] text-[#8a9bb5] pt-10 pb-6 border-t border-[#1a2a4a] dark:border-[#1a1a3e] text-center text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p><i class="fas fa-copyright mr-1.5"></i> 2026 AetherEx · All rights reserved · <span class="text-[#5a6e8a]">Prices powered by CoinGecko & LiveCoinWatch</span></p>
+            <div class="flex flex-wrap justify-center gap-4 mt-3 text-xs text-[#5a6e8a] dark:text-gray-500">
+                <a href="#" class="hover:text-white transition">Privacy</a>
+                <a href="#" class="hover:text-white transition">Terms</a>
+                <a href="#" class="hover:text-white transition">Support</a>
+                <a href="#" class="hover:text-white transition">Status</a>
+            </div>
+        </div>
+    </footer>
 
-<!-- ========== AUTH MODAL ========== -->
-<div id="authModal" class="fixed inset-0 z-50 modal-overlay hidden items-center justify-center p-4">
-  <div class="bg-white dark:bg-darkcard rounded-3xl shadow-2xl max-w-md w-full p-6 relative">
-    <button id="closeAuthModal" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"><i class="fas fa-times text-xl"></i></button>
-    <div class="text-center mb-4">
-      <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-2"><i class="fas fa-user-circle text-4xl text-primary"></i></div>
-      <h3 id="authTitle" class="text-2xl font-bold dark:text-white">Sign in</h3>
-      <p id="authSubtitle" class="text-sm text-[#5a6e8a] dark:text-gray-400">Access your portfolio</p>
-    </div>
-    <form id="authForm">
-      <div id="signupFields" class="hidden space-y-4">
-        <div><label class="block text-sm font-medium text-[#2d3e5f] dark:text-gray-300">Full name</label><input type="text" id="signupName" class="w-full mt-1 px-4 py-2 border border-[#e4e7ec] dark:border-[#334155] rounded-xl bg-white dark:bg-darkbg text-[#0b1d3a] dark:text-white focus:ring-2 focus:ring-primary outline-none" placeholder="John Doe" /></div>
-        <div><label class="block text-sm font-medium text-[#2d3e5f] dark:text-gray-300">Email</label><input type="email" id="signupEmail" class="w-full mt-1 px-4 py-2 border border-[#e4e7ec] dark:border-[#334155] rounded-xl bg-white dark:bg-darkbg text-[#0b1d3a] dark:text-white focus:ring-2 focus:ring-primary outline-none" placeholder="you@example.com" /></div>
-      </div>
-      <div class="space-y-4">
-        <div><label class="block text-sm font-medium text-[#2d3e5f] dark:text-gray-300">Username</label><input type="text" id="authUsername" class="w-full mt-1 px-4 py-2 border border-[#e4e7ec] dark:border-[#334155] rounded-xl bg-white dark:bg-darkbg text-[#0b1d3a] dark:text-white focus:ring-2 focus:ring-primary outline-none" placeholder="username" required /></div>
-        <div><label class="block text-sm font-medium text-[#2d3e5f] dark:text-gray-300">Password</label><input type="password" id="authPassword" class="w-full mt-1 px-4 py-2 border border-[#e4e7ec] dark:border-[#334155] rounded-xl bg-white dark:bg-darkbg text-[#0b1d3a] dark:text-white focus:ring-2 focus:ring-primary outline-none" placeholder="••••••••" required /></div>
-      </div>
-      <button type="submit" class="w-full btn-primary text-white font-semibold py-3 rounded-xl mt-6 transition">Sign in</button>
-      <p class="text-center text-sm text-[#5a6e8a] dark:text-gray-400 mt-4">
-        <span id="authToggleText">Don't have an account?</span>
-        <a href="#" id="authToggleLink" class="text-primary font-semibold hover:underline">Sign up</a>
-      </p>
-    </form>
-  </div>
-</div>
+    <!-- ====== JAVASCRIPT ====== -->
+    <script>
+        (function() {
+            // ─── CONFIG ───
+            const COINGECKO_IDS = ['bitcoin', 'ethereum', 'solana', 'usd-coin', 'ripple', 'cardano'];
+            const SYMBOL_MAP = { bitcoin: 'BTC', ethereum: 'ETH', solana: 'SOL', 'usd-coin': 'USDC', ripple: 'XRP',
+                cardano: 'ADA' };
+            const NAME_MAP = { bitcoin: 'Bitcoin', ethereum: 'Ethereum', solana: 'Solana', 'usd-coin': 'USD Coin',
+                ripple: 'XRP', cardano: 'Cardano' };
+            const ICON_MAP = { bitcoin: 'fab fa-bitcoin', ethereum: 'fab fa-ethereum', solana: 'fas fa-bolt',
+                'usd-coin': 'fas fa-dollar-sign', ripple: 'fas fa-circle', cardano: 'fas fa-layer-group' };
 
-<!-- ========== FOOTER ========== -->
-<footer class="bg-[#0b1a2f] dark:bg-[#0f172a] text-[#cbd5e1] pt-8 pb-4 mt-10 border-t border-[#1f3a5f] dark:border-[#1e293b] text-center text-sm">
-  <p><i class="fas fa-copyright mr-1"></i> 2026 AetherEx · All rights reserved</p>
-</footer>
+            const fallbackData = [
+                { id: 'bitcoin', symbol: 'BTC', name: 'Bitcoin', price: 43250, change: 2.4, marketCap: '850B',
+                    volume: '28B' },
+                { id: 'ethereum', symbol: 'ETH', name: 'Ethereum', price: 3250, change: 1.8, marketCap: '390B',
+                    volume: '15B' },
+                { id: 'solana', symbol: 'SOL', name: 'Solana', price: 186, change: 12.3, marketCap: '82B',
+                    volume: '5.2B' },
+                { id: 'usd-coin', symbol: 'USDC', name: 'USD Coin', price: 1.00, change: 0.0, marketCap: '52B',
+                    volume: '4.1B' },
+                { id: 'ripple', symbol: 'XRP', name: 'XRP', price: 0.62, change: -1.2, marketCap: '33B',
+                volume: '2.8B' },
+                { id: 'cardano', symbol: 'ADA', name: 'Cardano', price: 0.48, change: 5.6, marketCap: '17B',
+                    volume: '1.2B' }
+            ];
 
-<!-- ========== JAVASCRIPT ========== -->
-<script>
-  (function() {
-    // ---------- MOCK DATA ----------
-    const cryptoData = [
-      { id: 'btc', name: 'Bitcoin', symbol: 'BTC', price: 43250, change: +2.4, marketCap: '850B', volume: '28B' },
-      { id: 'eth', name: 'Ethereum', symbol: 'ETH', price: 3250, change: +1.8, marketCap: '390B', volume: '15B' },
-      { id: 'sol', name: 'Solana', symbol: 'SOL', price: 186, change: +12.3, marketCap: '82B', volume: '5.2B' },
-      { id: 'usdc', name: 'USD Coin', symbol: 'USDC', price: 1.00, change: 0.0, marketCap: '52B', volume: '4.1B' },
-      { id: 'xrp', name: 'XRP', symbol: 'XRP', price: 0.62, change: -1.2, marketCap: '33B', volume: '2.8B' },
-      { id: 'ada', name: 'Cardano', symbol: 'ADA', price: 0.48, change: +5.6, marketCap: '17B', volume: '1.2B' },
-    ];
+            // ─── STATE ───
+            let currentUser = null;
+            let chartInstance = null;
+            let liveData = null;
+            let updateInterval = null;
 
-    const transactions = [
-      { type: 'buy', asset: 'BTC', amount: 0.025, value: 1081, date: '2026-07-10 14:32' },
-      { type: 'sell', asset: 'ETH', amount: 0.5, value: 1625, date: '2026-07-09 09:15' },
-      { type: 'buy', asset: 'SOL', amount: 5, value: 930, date: '2026-07-08 22:10' },
-      { type: 'buy', asset: 'USDC', amount: 500, value: 500, date: '2026-07-07 11:45' },
-    ];
+            // ─── DOM REFS ───
+            const userActions = document.getElementById('userActions');
+            const authModal = document.getElementById('authModal');
+            const closeAuthModal = document.getElementById('closeAuthModal');
+            const authForm = document.getElementById('authForm');
+            const authTitle = document.getElementById('authTitle');
+            const authSubtitle = document.getElementById('authSubtitle');
+            const authToggleLink = document.getElementById('authToggleLink');
+            const authToggleText = document.getElementById('authToggleText');
+            const signupFields = document.getElementById('signupFields');
+            const authUsername = document.getElementById('authUsername');
+            const authPassword = document.getElementById('authPassword');
+            const signupName = document.getElementById('signupName');
+            const signupEmail = document.getElementById('signupEmail');
+            const userName = document.getElementById('userName');
+            const totalBalanceEl = document.getElementById('totalBalance');
+            const balanceChange = document.getElementById('balanceChange');
+            const marketTableBody = document.getElementById('marketTableBody');
+            const transactionList = document.getElementById('transactionList');
+            const buyBtn = document.getElementById('buyBtn');
+            const sellBtn = document.getElementById('sellBtn');
+            const heroBuyBtn = document.getElementById('heroBuyBtn');
+            const tradeModal = document.getElementById('tradeModal');
+            const closeTradeModal = document.getElementById('closeTradeModal');
+            const tradeForm = document.getElementById('tradeForm');
+            const tradeAsset = document.getElementById('tradeAsset');
+            const tradeAmount = document.getElementById('tradeAmount');
+            const tradePrice = document.getElementById('tradePrice');
+            const tradeSubmitBtn = document.getElementById('tradeSubmitBtn');
+            const tradeModalTitle = document.getElementById('tradeModalTitle');
+            const darkToggle = document.getElementById('darkToggle');
+            const menuToggle = document.getElementById('menuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const heroVolume = document.getElementById('heroVolume');
+            const statPortfolio = document.getElementById('statPortfolio');
+            const statPortfolioChange = document.getElementById('statPortfolioChange');
+            const statAssets = document.getElementById('statAssets');
+            const statVolume = document.getElementById('statVolume');
+            const statVolumeChange = document.getElementById('statVolumeChange');
+            const statBestPerformer = document.getElementById('statBestPerformer');
 
-    // portfolio holdings
-    const holdings = [
-      { asset: 'BTC', amount: 0.12, value: 5190 },
-      { asset: 'ETH', amount: 2.5, value: 8125 },
-      { asset: 'SOL', amount: 45, value: 8370 },
-      { asset: 'USDC', amount: 1500, value: 1500 },
-    ];
-    let totalBalance = holdings.reduce((sum, h) => sum + h.value, 0);
+            // ─── UTILITY ───
+            function getUsers() {
+                const val = localStorage.getItem('aether_users');
+                return val ? JSON.parse(val) : {};
+            }
 
-    // ---------- STATE ----------
-    let currentUser = null;
-    let chartInstance = null;
+            function setUsers(users) { localStorage.setItem('aether_users', JSON.stringify(users)); }
 
-    // ---------- DOM REFS ----------
-    const userActions = document.getElementById('userActions');
-    const authModal = document.getElementById('authModal');
-    const closeAuthModal = document.getElementById('closeAuthModal');
-    const authForm = document.getElementById('authForm');
-    const authTitle = document.getElementById('authTitle');
-    const authSubtitle = document.getElementById('authSubtitle');
-    const authToggleLink = document.getElementById('authToggleLink');
-    const authToggleText = document.getElementById('authToggleText');
-    const signupFields = document.getElementById('signupFields');
-    const authUsername = document.getElementById('authUsername');
-    const authPassword = document.getElementById('authPassword');
-    const signupName = document.getElementById('signupName');
-    const signupEmail = document.getElementById('signupEmail');
-    const userName = document.getElementById('userName');
-    const totalBalanceEl = document.getElementById('totalBalance');
-    const marketTableBody = document.getElementById('marketTableBody');
-    const transactionList = document.getElementById('transactionList');
-    const buyBtn = document.getElementById('buyBtn');
-    const sellBtn = document.getElementById('sellBtn');
-    const tradeModal = document.getElementById('tradeModal');
-    const closeTradeModal = document.getElementById('closeTradeModal');
-    const tradeForm = document.getElementById('tradeForm');
-    const tradeAsset = document.getElementById('tradeAsset');
-    const tradeAmount = document.getElementById('tradeAmount');
-    const tradePrice = document.getElementById('tradePrice');
-    const tradeSubmitBtn = document.getElementById('tradeSubmitBtn');
-    const tradeModalTitle = document.getElementById('tradeModalTitle');
-    const darkToggle = document.getElementById('darkToggle');
-    const menuToggle = document.getElementById('menuToggle');
-    const mobileMenu = document.getElementById('mobileMenu');
+            function getCurrentUser() {
+                const username = localStorage.getItem('aether_currentUser');
+                if (!username) return null;
+                const users = getUsers();
+                return users[username] || null;
+            }
 
-    // ---------- UTILITY ----------
-    function getUsers() {
-      const val = localStorage.getItem('aether_users');
-      return val ? JSON.parse(val) : {};
-    }
-    function setUsers(users) { localStorage.setItem('aether_users', JSON.stringify(users)); }
-    function getCurrentUser() {
-      const username = localStorage.getItem('aether_currentUser');
-      if (!username) return null;
-      const users = getUsers();
-      return users[username] || null;
-    }
-    function setCurrentUser(username) {
-      localStorage.setItem('aether_currentUser', username);
-    }
+            function setCurrentUser(username) { localStorage.setItem('aether_currentUser', username); }
 
-    // ---------- AUTH ----------
-    function openAuthModal(mode = 'login') {
-      authModal.style.display = 'flex';
-      authModal.classList.remove('hidden');
-      if (mode === 'login') {
-        authTitle.innerText = 'Sign in';
-        authSubtitle.innerText = 'Welcome back!';
-        signupFields.classList.add('hidden');
-        authToggleText.innerText = "Don't have an account?";
-        authToggleLink.innerText = 'Sign up';
-        authForm.querySelector('button[type="submit"]').innerText = 'Sign in';
-      } else {
-        authTitle.innerText = 'Create account';
-        authSubtitle.innerText = 'Join AetherEx';
-        signupFields.classList.remove('hidden');
-        authToggleText.innerText = "Already have an account?";
-        authToggleLink.innerText = 'Sign in';
-        authForm.querySelector('button[type="submit"]').innerText = 'Sign up';
-      }
-    }
-    function closeAuthModalFn() {
-      authModal.classList.add('hidden');
-      authModal.style.display = 'none';
-    }
-    function handleAuthSubmit(e) {
-      e.preventDefault();
-      const username = authUsername.value.trim();
-      const password = authPassword.value.trim();
-      if (!username || !password) { alert('Please fill in all fields.'); return; }
-      const users = getUsers();
-      const isSignup = !signupFields.classList.contains('hidden');
-      if (isSignup) {
-        const name = signupName.value.trim() || username;
-        const email = signupEmail.value.trim() || `${username}@example.com`;
-        if (users[username]) { alert('Username already exists.'); return; }
-        users[username] = { password, name, email };
-        setUsers(users);
-        loginUser(username);
-      } else {
-        if (!users[username] || users[username].password !== password) {
-          alert('Invalid credentials.');
-          return;
-        }
-        loginUser(username);
-      }
-    }
-    function loginUser(username) {
-      currentUser = username;
-      setCurrentUser(username);
-      updateUI();
-      closeAuthModalFn();
-      showDashboard();
-    }
-    function logoutUser() {
-      currentUser = null;
-      localStorage.removeItem('aether_currentUser');
-      updateUI();
-      showDashboard();
-    }
+            // ─── FETCH LIVE DATA ───
+            async function fetchLiveData() {
+                try {
+                    const url =
+                        `https://api.coingecko.com/api/v3/simple/price?ids=${COINGECKO_IDS.join(',')}&vs_currencies=usd&include_24hr_change=true&include_market_cap=true&include_24hr_vol=true`;
+                    const response = await fetch(url);
+                    if (!response.ok) throw new Error('API error');
+                    const data = await response.json();
+                    const marketUrl =
+                        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${COINGECKO_IDS.join(',')}&order=market_cap_desc&per_page=100&page=1&sparkline=false`;
+                    const marketResp = await fetch(marketUrl);
+                    const marketData = await marketResp.json();
+                    const combined = COINGECKO_IDS.map(id => {
+                        const priceData = data[id];
+                        const market = marketData.find(m => m.id === id);
+                        return {
+                            id,
+                            symbol: SYMBOL_MAP[id],
+                            name: NAME_MAP[id],
+                            icon: ICON_MAP[id] || 'fas fa-coins',
+                            price: priceData ? priceData.usd : 0,
+                            change: priceData ? priceData.usd_24h_change : 0,
+                            marketCap: market ? formatMarketCap(market.market_cap) : 'N/A',
+                            volume: market ? formatVolume(market.total_volume) : 'N/A'
+                        };
+                    });
+                    liveData = combined;
+                    return combined;
+                } catch (error) {
+                    console.warn('Using fallback data', error);
+                    liveData = fallbackData.map(d => ({ ...d, icon: ICON_MAP[d.id] || 'fas fa-coins' }));
+                    return liveData;
+                }
+            }
 
-    // ---------- UI UPDATE ----------
-    function updateUI() {
-      const user = getCurrentUser();
-      if (user) {
-        currentUser = user;
-        userActions.innerHTML = `
-          <span class="hidden sm:inline text-sm font-medium dark:text-gray-300">${user.name}</span>
-          <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary/30 cursor-pointer" id="avatarBtn" />
-        `;
-        document.getElementById('avatarBtn')?.addEventListener('click', () => showDashboard());
-        userName.innerText = user.name;
-        totalBalanceEl.innerText = '$' + totalBalance.toFixed(2);
-      } else {
-        userActions.innerHTML = `
-          <a href="#" id="loginBtn" class="btn-primary text-white px-5 py-2.5 rounded-full font-semibold text-sm shadow-md shadow-blue-500/20 flex items-center gap-2"><i class="fas fa-user-circle"></i> <span class="hidden sm:inline">Sign in</span></a>
-        `;
-        document.getElementById('loginBtn')?.addEventListener('click', (e) => { e.preventDefault(); openAuthModal('login'); });
-        userName.innerText = 'Guest';
-        totalBalanceEl.innerText = '$0.00';
-      }
-      renderMarketTable();
-      renderTransactions();
-    }
+            function formatMarketCap(val) {
+                if (val >= 1e12) return '$' + (val / 1e12).toFixed(1) + 'T';
+                if (val >= 1e9) return '$' + (val / 1e9).toFixed(1) + 'B';
+                if (val >= 1e6) return '$' + (val / 1e6).toFixed(1) + 'M';
+                return '$' + val.toFixed(0);
+            }
 
-    // ---------- RENDER MARKET TABLE ----------
-    function renderMarketTable() {
-      marketTableBody.innerHTML = '';
-      cryptoData.forEach(coin => {
-        const changeColor = coin.change >= 0 ? 'text-green-600' : 'text-red-600';
-        const changeIcon = coin.change >= 0 ? 'fa-arrow-up' : 'fa-arrow-down';
-        const tr = document.createElement('tr');
-        tr.className = 'crypto-row border-b border-[#eef2f6] dark:border-[#334155]';
-        tr.innerHTML = `
-          <td class="py-2 flex items-center gap-2"><span class="font-semibold">${coin.symbol}</span><span class="text-[#5a6e8a] dark:text-gray-400 text-xs">${coin.name}</span></td>
-          <td class="text-right font-medium dark:text-white">$${coin.price.toLocaleString()}</td>
-          <td class="text-right hidden sm:table-cell ${changeColor}"><i class="fas ${changeIcon}"></i> ${coin.change.toFixed(1)}%</td>
-          <td class="text-right hidden md:table-cell text-[#5a6e8a] dark:text-gray-400">${coin.marketCap}</td>
-          <td class="text-right"><button class="text-primary hover:underline text-sm trade-btn" data-symbol="${coin.symbol}">Trade</button></td>
-        `;
-        marketTableBody.appendChild(tr);
-      });
-      document.querySelectorAll('.trade-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const symbol = btn.dataset.symbol;
-          openTradeModal('buy', symbol);
-        });
-      });
-    }
+            function formatVolume(val) {
+                if (val >= 1e9) return '$' + (val / 1e9).toFixed(1) + 'B';
+                if (val >= 1e6) return '$' + (val / 1e6).toFixed(1) + 'M';
+                return '$' + val.toFixed(0);
+            }
 
-    // ---------- RENDER TRANSACTIONS ----------
-    function renderTransactions() {
-      transactionList.innerHTML = '';
-      if (!getCurrentUser()) {
-        transactionList.innerHTML = '<p class="text-sm text-[#5a6e8a] dark:text-gray-400">Sign in to see your transactions.</p>';
-        return;
-      }
-      transactions.slice(0, 4).forEach(tx => {
-        const div = document.createElement('div');
-        div.className = 'flex items-center justify-between py-2 border-b border-[#eef2f6] dark:border-[#334155] last:border-0';
-        const color = tx.type === 'buy' ? 'text-green-600' : 'text-red-600';
-        const icon = tx.type === 'buy' ? 'fa-arrow-down' : 'fa-arrow-up';
-        div.innerHTML = `
-          <div class="flex items-center gap-3">
-            <span class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center"><i class="fas ${icon} ${color}"></i></span>
-            <div><span class="font-medium dark:text-white">${tx.type === 'buy' ? 'Bought' : 'Sold'} ${tx.asset}</span><span class="text-xs text-[#5a6e8a] dark:text-gray-400 block">${tx.date}</span></div>
-          </div>
-          <div class="text-right"><span class="font-semibold dark:text-white">$${tx.value.toLocaleString()}</span><span class="text-xs text-[#5a6e8a] dark:text-gray-400 block">${tx.amount} ${tx.asset}</span></div>
-        `;
-        transactionList.appendChild(div);
-      });
-    }
+            // ─── UPDATE UI ───
+            function updateUIWithData(data) {
+                if (!data) return;
+                // Update CoinGecko market table
+                renderMarketTable(data);
 
-    // ---------- CHART ----------
-    function initChart() {
-      const ctx = document.getElementById('portfolioChart').getContext('2d');
-      if (chartInstance) chartInstance.destroy();
-      const labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-      const data = [22000, 23500, 22800, 24000, 23800, 24500, 24520];
-      chartInstance = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels,
-          datasets: [{
-            label: 'Portfolio value',
-            data,
-            borderColor: '#006aff',
-            backgroundColor: 'rgba(0,106,255,0.08)',
-            fill: true,
-            tension: 0.3,
-            pointRadius: 3,
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: { y: { beginAtZero: false, grid: { color: 'rgba(0,0,0,0.04)' } }, x: { grid: { display: false } } }
-        }
-      });
-    }
+                // Update stats
+                const totalCap = data.reduce((sum, c) => sum + (parseFloat(c.price) || 0), 0);
+                const best = data.reduce((a, b) => (a.change > b.change ? a : b));
+                const totalVol = data.reduce((sum, c) => {
+                    const vol = parseFloat(c.volume.replace(/[$,BMT]/g, '')) || 0;
+                    if (c.volume.includes('B')) return sum + vol * 1e9;
+                    if (c.volume.includes('M')) return sum + vol * 1e6;
+                    return sum + vol;
+                }, 0);
+                heroVolume.innerText = '$' + (totalVol / 1e9).toFixed(1) + 'B';
+                statPortfolio.innerText = '$' + (totalCap / 1000).toFixed(1) + 'k';
+                statPortfolioChange.innerText = (best.change > 0 ? '+' : '') + best.change.toFixed(1) + '%';
+                statPortfolioChange.className = 'text-xs ' + (best.change >= 0 ? 'text-[#06d6a0]' : 'text-red-500');
+                statAssets.innerText = data.length;
+                statVolume.innerText = '$' + (totalVol / 1e6).toFixed(1) + 'M';
+                statVolumeChange.innerText = (best.change > 0 ? '+' : '') + best.change.toFixed(1) + '%';
+                statVolumeChange.className = 'text-xs ' + (best.change >= 0 ? 'text-[#06d6a0]' : 'text-red-500');
+                statBestPerformer.innerText = best.symbol + ' ' + (best.change > 0 ? '+' : '') + best.change.toFixed(1) +
+                    '%';
+                statBestPerformer.className = 'text-lg font-bold ' + (best.change >= 0 ? 'text-[#06d6a0]' :
+                'text-red-500');
 
-    // ---------- TRADE MODAL ----------
-    function openTradeModal(type, symbol = 'BTC') {
-      tradeModal.style.display = 'flex';
-      tradeModal.classList.remove('hidden');
-      tradeModalTitle.innerText = type === 'buy' ? 'Buy crypto' : 'Sell crypto';
-      tradeSubmitBtn.innerText = type === 'buy' ? 'Buy' : 'Sell';
-      tradeSubmitBtn.className = type === 'buy' ? 'btn-success' : 'btn-danger';
-      const coin = cryptoData.find(c => c.symbol === symbol);
-      if (coin) {
-        tradeAsset.value = symbol;
-        tradePrice.value = '$' + coin.price.toFixed(2);
-      } else {
-        tradeAsset.value = 'BTC';
-        tradePrice.value = '$' + cryptoData[0].price.toFixed(2);
-      }
-      // update price on asset change
-      tradeAsset.onchange = function() {
-        const sym = this.value;
-        const c = cryptoData.find(c => c.symbol === sym);
-        if (c) tradePrice.value = '$' + c.price.toFixed(2);
-      };
-    }
+                // Balance
+                const user = getCurrentUser();
+                if (user) {
+                    const balance = (totalCap / 1000) * 1.2 + 1000;
+                    totalBalanceEl.innerText = '$' + balance.toFixed(2);
+                    balanceChange.innerText = (best.change > 0 ? '+' : '') + best.change.toFixed(1) + '%';
+                    balanceChange.className = 'text-sm font-semibold ' + (best.change >= 0 ? 'text-[#06d6a0]' :
+                        'text-red-500');
+                }
+            }
 
-    function closeTradeModalFn() {
-      tradeModal.classList.add('hidden');
-      tradeModal.style.display = 'none';
-    }
+            // ─── MARKET TABLE (CoinGecko) ───
+            function renderMarketTable(data) {
+                marketTableBody.innerHTML = '';
+                data.forEach(coin => {
+                    const changeColor = coin.change >= 0 ? 'text-[#06d6a0]' : 'text-red-500';
+                    const changeIcon = coin.change >= 0 ? 'fa-arrow-up' : 'fa-arrow-down';
+                    const tr = document.createElement('tr');
+                    tr.className = 'crypto-row border-b border-[#eef2f6] dark:border-[#1a1a3e]';
+                    tr.innerHTML = `
+                <td class="py-3 flex items-center gap-2.5"><span class="w-7 h-7 rounded-full bg-[#f0f4fe] dark:bg-[#1a1a3e] flex items-center justify-center text-[#0052ff]"><i class="${coin.icon}"></i></span><span class="font-semibold text-[#0b1120] dark:text-white">${coin.symbol}</span><span class="text-[#1a2a4a] dark:text-gray-400 text-xs hidden sm:inline">${coin.name}</span></td>
+                <td class="text-right font-medium text-[#0b1120] dark:text-white">$${coin.price.toLocaleString()}</td>
+                <td class="text-right hidden sm:table-cell ${changeColor}"><i class="fas ${changeIcon}"></i> ${coin.change.toFixed(1)}%</td>
+                <td class="text-right hidden md:table-cell text-[#1a2a4a] dark:text-gray-400">${coin.marketCap}</td>
+                <td class="text-right hidden lg:table-cell text-[#1a2a4a] dark:text-gray-400">${coin.volume}</td>
+                <td class="text-right"><button class="text-[#0052ff] hover:underline text-sm font-medium trade-btn" data-id="${coin.id}">Trade</button></td>
+              `;
+                    marketTableBody.appendChild(tr);
+                });
+                document.querySelectorAll('.trade-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const id = btn.dataset.id;
+                        if (!getCurrentUser()) { openAuthModal('login'); return; }
+                        openTradeModal('buy', id);
+                    });
+                });
+            }
 
-    function handleTradeSubmit(e) {
-      e.preventDefault();
-      const asset = tradeAsset.value;
-      const amount = parseFloat(tradeAmount.value);
-      if (!amount || amount <= 0) { alert('Enter a valid amount.'); return; }
-      const coin = cryptoData.find(c => c.symbol === asset);
-      if (!coin) return;
-      const total = amount;
-      alert(`✅ ${tradeSubmitBtn.innerText} ${amount} USD worth of ${asset} at $${coin.price.toFixed(2)}. (simulated)`);
-      // add transaction
-      transactions.unshift({
-        type: tradeSubmitBtn.innerText.toLowerCase(),
-        asset,
-        amount: total / coin.price,
-        value: total,
-        date: new Date().toLocaleString()
-      });
-      closeTradeModalFn();
-      renderTransactions();
-    }
+            // ─── TRANSACTIONS (mock) ───
+            const transactions = [
+                { type: 'buy', asset: 'BTC', amount: 0.025, value: 1081, date: '2026-07-10 14:32' },
+                { type: 'sell', asset: 'ETH', amount: 0.5, value: 1625, date: '2026-07-09 09:15' },
+                { type: 'buy', asset: 'SOL', amount: 5, value: 930, date: '2026-07-08 22:10' },
+                { type: 'buy', asset: 'USDC', amount: 500, value: 500, date: '2026-07-07 11:45' },
+            ];
 
-    // ---------- VIEW SWITCHING ----------
-    function showDashboard() {
-      // just ensure we are on dashboard
-      document.getElementById('dashboardView').classList.add('active');
-      // re-init chart if not exists
-      setTimeout(initChart, 100);
-      updateUI();
-    }
+            function renderTransactions() {
+                transactionList.innerHTML = '';
+                if (!getCurrentUser()) {
+                    transactionList.innerHTML =
+                        '<p class="text-sm text-[#1a2a4a] dark:text-gray-400 text-center py-4">Sign in to see your transactions</p>';
+                    return;
+                }
+                if (transactions.length === 0) {
+                    transactionList.innerHTML =
+                        '<p class="text-sm text-[#1a2a4a] dark:text-gray-400 text-center py-4">No transactions yet</p>';
+                    return;
+                }
+                transactions.slice(0, 4).forEach(tx => {
+                    const div = document.createElement('div');
+                    div.className =
+                    'flex items-center justify-between py-2.5 border-b border-[#eef2f6] dark:border-[#1a1a3e] last:border-0';
+                    const color = tx.type === 'buy' ? 'text-[#06d6a0]' : 'text-red-500';
+                    const icon = tx.type === 'buy' ? 'fa-arrow-down' : 'fa-arrow-up';
+                    div.innerHTML = `
+                <div class="flex items-center gap-3">
+                  <span class="w-8 h-8 rounded-full bg-[#f0f4fe] dark:bg-[#1a1a3e] flex items-center justify-center"><i class="fas ${icon} ${color}"></i></span>
+                  <div><span class="font-medium text-[#0b1120] dark:text-white">${tx.type === 'buy' ? 'Bought' : 'Sold'} ${tx.asset}</span><span class="text-xs text-[#1a2a4a] dark:text-gray-400 block">${tx.date}</span></div>
+                </div>
+                <div class="text-right"><span class="font-semibold text-[#0b1120] dark:text-white">$${tx.value.toLocaleString()}</span><span class="text-xs text-[#1a2a4a] dark:text-gray-400 block">${tx.amount} ${tx.asset}</span></div>
+              `;
+                    transactionList.appendChild(div);
+                });
+            }
 
-    // ---------- EVENT LISTENERS ----------
-    closeAuthModal.addEventListener('click', closeAuthModalFn);
-    authModal.addEventListener('click', (e) => { if (e.target === authModal) closeAuthModalFn(); });
-    authToggleLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      const isLogin = signupFields.classList.contains('hidden');
-      openAuthModal(isLogin ? 'signup' : 'login');
-    });
-    authForm.addEventListener('submit', handleAuthSubmit);
+            // ─── CHART ───
+            function initChart() {
+                const ctx = document.getElementById('portfolioChart').getContext('2d');
+                if (chartInstance) chartInstance.destroy();
+                const labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                const data = [22000, 23500, 22800, 24000, 23800, 24500, 24520];
+                chartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels,
+                        datasets: [{
+                            label: 'Portfolio value',
+                            data,
+                            borderColor: '#0052ff',
+                            backgroundColor: 'rgba(0,82,255,0.06)',
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 3,
+                            pointBackgroundColor: '#0052ff',
+                            borderWidth: 2.5,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { beginAtZero: false, grid: { color: 'rgba(0,0,0,0.04)' } },
+                            x: { grid: { display: false } }
+                        }
+                    }
+                });
+            }
 
-    // Logout (will be added after avatar)
-    // We'll add a logout option via a click on avatar? We'll keep it simple: logout via menu? We'll add a hidden logout link.
-    // Actually we can add a dropdown but for simplicity we'll just add a logout button in userActions if logged in.
-    // We'll handle it in updateUI by adding a logout button in the avatar area.
+            // ─── TRADE MODAL ───
+            function openTradeModal(type, symbolId = 'bitcoin') {
+                tradeModal.style.display = 'flex';
+                tradeModal.classList.remove('hidden');
+                tradeModalTitle.innerText = type === 'buy' ? 'Buy crypto' : 'Sell crypto';
+                tradeSubmitBtn.innerText = type === 'buy' ? 'Buy' : 'Sell';
+                tradeSubmitBtn.className = (type === 'buy' ? 'btn-success' : 'bg-red-500 hover:bg-red-600') +
+                    ' text-white py-3 rounded-xl font-semibold transition w-full';
+                const coin = liveData ? liveData.find(c => c.id === symbolId) : null;
+                if (coin) {
+                    tradeAsset.value = symbolId;
+                    tradePrice.value = '$' + coin.price.toFixed(2);
+                } else {
+                    tradeAsset.value = 'bitcoin';
+                    tradePrice.value = '$' + (liveData ? liveData.find(c => c.id === 'bitcoin')?.price.toFixed(2) :
+                    '0.00');
+                }
+                tradeAsset.onchange = function() {
+                    const id = this.value;
+                    const c = liveData ? liveData.find(c => c.id === id) : null;
+                    if (c) tradePrice.value = '$' + c.price.toFixed(2);
+                };
+            }
 
-    // Trade modal
-    buyBtn.addEventListener('click', () => { if (!getCurrentUser()) { openAuthModal('login'); return; } openTradeModal('buy'); });
-    sellBtn.addEventListener('click', () => { if (!getCurrentUser()) { openAuthModal('login'); return; } openTradeModal('sell'); });
-    closeTradeModal.addEventListener('click', closeTradeModalFn);
-    tradeModal.addEventListener('click', (e) => { if (e.target === tradeModal) closeTradeModalFn(); });
-    tradeForm.addEventListener('submit', handleTradeSubmit);
+            function closeTradeModalFn() {
+                tradeModal.classList.add('hidden');
+                tradeModal.style.display = 'none';
+            }
 
-    // Dark mode
-    darkToggle.addEventListener('click', () => {
-      document.documentElement.classList.toggle('dark');
-      localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-    });
-    if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
+            function handleTradeSubmit(e) {
+                e.preventDefault();
+                if (!getCurrentUser()) { openAuthModal('login'); return; }
+                const assetId = tradeAsset.value;
+                const amount = parseFloat(tradeAmount.value);
+                if (!amount || amount <= 0) { alert('Enter a valid amount.'); return; }
+                const coin = liveData ? liveData.find(c => c.id === assetId) : null;
+                if (!coin) { alert('Asset not found.'); return; }
+                const total = amount;
+                alert(
+                    `✅ ${tradeSubmitBtn.innerText} ${amount} USD worth of ${coin.symbol} at $${coin.price.toFixed(2)}. (simulated)`
+                    );
+                transactions.unshift({
+                    type: tradeSubmitBtn.innerText.toLowerCase(),
+                    asset: coin.symbol,
+                    amount: total / coin.price,
+                    value: total,
+                    date: new Date().toLocaleString()
+                });
+                closeTradeModalFn();
+                renderTransactions();
+            }
 
-    // Mobile menu
-    menuToggle.addEventListener('click', () => {
-      mobileMenu.classList.toggle('open');
-    });
+            // ─── AUTH ───
+            function openAuthModal(mode = 'login') {
+                authModal.style.display = 'flex';
+                authModal.classList.remove('hidden');
+                if (mode === 'login') {
+                    authTitle.innerText = 'Sign in';
+                    authSubtitle.innerText = 'Welcome back!';
+                    signupFields.classList.add('hidden');
+                    authToggleText.innerText = "Don't have an account?";
+                    authToggleLink.innerText = 'Sign up';
+                    authForm.querySelector('button[type="submit"]').innerText = 'Sign in';
+                } else {
+                    authTitle.innerText = 'Create account';
+                    authSubtitle.innerText = 'Join AetherEx';
+                    signupFields.classList.remove('hidden');
+                    authToggleText.innerText = "Already have an account?";
+                    authToggleLink.innerText = 'Sign in';
+                    authForm.querySelector('button[type="submit"]').innerText = 'Sign up';
+                }
+            }
 
-    // ---------- INIT ----------
-    // Restore session
-    const savedUser = getCurrentUser();
-    if (savedUser) {
-      currentUser = savedUser;
-    }
-    updateUI();
-    showDashboard();
+            function closeAuthModalFn() {
+                authModal.classList.add('hidden');
+                authModal.style.display = 'none';
+            }
 
-    // Add logout from avatar (simple)
-    // We'll add a logout button in the userActions after the avatar by modifying updateUI.
-    // Let's override updateUI to include logout button.
-    const originalUpdateUI = updateUI;
-    updateUI = function() {
-      originalUpdateUI();
-      const user = getCurrentUser();
-      if (user) {
-        // add logout button after avatar
-        const actions = document.getElementById('userActions');
-        // Remove existing logout if any
-        const oldLogout = actions.querySelector('#logoutBtn');
-        if (oldLogout) oldLogout.remove();
-        const logoutBtn = document.createElement('button');
-        logoutBtn.id = 'logoutBtn';
-        logoutBtn.className = 'text-sm text-red-500 hover:text-red-700 dark:hover:text-red-400 ml-2';
-        logoutBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i>';
-        logoutBtn.addEventListener('click', (e) => { e.preventDefault(); logoutUser(); });
-        actions.appendChild(logoutBtn);
-      }
-    };
-    // re-run
-    updateUI();
+            function handleAuthSubmit(e) {
+                e.preventDefault();
+                const username = authUsername.value.trim();
+                const password = authPassword.value.trim();
+                if (!username || !password) { alert('Please fill in all fields.'); return; }
+                const users = getUsers();
+                const isSignup = !signupFields.classList.contains('hidden');
+                if (isSignup) {
+                    const name = signupName.value.trim() || username;
+                    const email = signupEmail.value.trim() || `${username}@example.com`;
+                    if (users[username]) { alert('Username already exists.'); return; }
+                    users[username] = { password, name, email };
+                    setUsers(users);
+                    loginUser(username);
+                } else {
+                    if (!users[username] || users[username].password !== password) {
+                        alert('Invalid credentials.');
+                        return;
+                    }
+                    loginUser(username);
+                }
+            }
 
-    // Also listen for changes to user actions after login
-    // We'll also need to re-render transactions on login
-    // already covered.
+            function loginUser(username) {
+                currentUser = username;
+                setCurrentUser(username);
+                updateUI();
+                closeAuthModalFn();
+                showDashboard();
+            }
 
-    // Ensure chart resizes
-    window.addEventListener('resize', () => {
-      if (chartInstance) chartInstance.resize();
-    });
+            function logoutUser() {
+                currentUser = null;
+                localStorage.removeItem('aether_currentUser');
+                updateUI();
+                showDashboard();
+            }
 
-    // If user logs in, show transactions
-    // Already handled in renderTransactions.
+            // ─── UI UPDATE ───
+            function updateUI() {
+                const user = getCurrentUser();
+                if (user) {
+                    currentUser = user;
+                    userActions.innerHTML = `
+                <span class="hidden sm:inline text-sm font-medium dark:text-gray-300">${user.name}</span>
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-8 h-8 rounded-full object-cover ring-2 ring-[#0052ff]/30 cursor-pointer" id="avatarBtn" />
+              `;
+                    document.getElementById('avatarBtn')?.addEventListener('click', () => showDashboard());
+                    userName.innerText = user.name;
+                    const actions = document.getElementById('userActions');
+                    let logoutBtn = document.getElementById('logoutBtn');
+                    if (!logoutBtn) {
+                        logoutBtn = document.createElement('button');
+                        logoutBtn.id = 'logoutBtn';
+                        logoutBtn.className =
+                        'text-sm text-red-500 hover:text-red-700 dark:hover:text-red-400 ml-2';
+                        logoutBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i>';
+                        logoutBtn.addEventListener('click', (e) => { e.preventDefault(); logoutUser(); });
+                        actions.appendChild(logoutBtn);
+                    }
+                } else {
+                    userActions.innerHTML = `
+                <a href="#" id="loginBtn" class="btn-primary text-white px-5 py-2.5 rounded-full font-semibold text-sm shadow-md shadow-blue-500/20 flex items-center gap-2"><i class="fas fa-user-circle"></i> <span class="hidden sm:inline">Sign in</span></a>
+              `;
+                    document.getElementById('loginBtn')?.addEventListener('click', (e) => { e.preventDefault();
+                        openAuthModal('login'); });
+                    userName.innerText = 'Guest';
+                    totalBalanceEl.innerText = '$0.00';
+                    const oldLogout = document.getElementById('logoutBtn');
+                    if (oldLogout) oldLogout.remove();
+                }
+                renderTransactions();
+            }
 
-  })();
-</script>
+            // ─── VIEW ───
+            function showDashboard() {
+                document.getElementById('dashboardView').classList.add('active');
+                setTimeout(initChart, 200);
+                updateUI();
+            }
+
+            // ─── LIVE REFRESH ───
+            async function refreshData() {
+                const data = await fetchLiveData();
+                if (data) {
+                    updateUIWithData(data);
+                    if (!tradeModal.classList.contains('hidden')) {
+                        const assetId = tradeAsset.value;
+                        const coin = data.find(c => c.id === assetId);
+                        if (coin) tradePrice.value = '$' + coin.price.toFixed(2);
+                    }
+                }
+            }
+
+            // ─── EVENTS ───
+            closeAuthModal.addEventListener('click', closeAuthModalFn);
+            authModal.addEventListener('click', (e) => { if (e.target === authModal) closeAuthModalFn(); });
+            authToggleLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                const isLogin = signupFields.classList.contains('hidden');
+                openAuthModal(isLogin ? 'signup' : 'login');
+            });
+            authForm.addEventListener('submit', handleAuthSubmit);
+
+            heroBuyBtn.addEventListener('click', () => {
+                if (!getCurrentUser()) { openAuthModal('login'); return; }
+                openTradeModal('buy');
+            });
+            buyBtn.addEventListener('click', () => {
+                if (!getCurrentUser()) { openAuthModal('login'); return; }
+                openTradeModal('buy');
+            });
+            sellBtn.addEventListener('click', () => {
+                if (!getCurrentUser()) { openAuthModal('login'); return; }
+                openTradeModal('sell');
+            });
+            closeTradeModal.addEventListener('click', closeTradeModalFn);
+            tradeModal.addEventListener('click', (e) => { if (e.target === tradeModal) closeTradeModalFn(); });
+            tradeForm.addEventListener('submit', handleTradeSubmit);
+
+            // Dark mode
+            darkToggle.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' :
+                'light');
+            });
+            if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
+
+            // Mobile menu
+            menuToggle.addEventListener('click', () => {
+                mobileMenu.classList.toggle('open');
+            });
+
+            // ─── INIT ───
+            async function init() {
+                const savedUser = getCurrentUser();
+                if (savedUser) currentUser = savedUser;
+                await refreshData();
+                updateUI();
+                showDashboard();
+                if (updateInterval) clearInterval(updateInterval);
+                updateInterval = setInterval(refreshData, 60000);
+                window.addEventListener('resize', () => {
+                    if (chartInstance) chartInstance.resize();
+                });
+            }
+            init();
+
+        })();
+    </script>
 </body>
 </html>
